@@ -5,7 +5,7 @@ VisualStudioVersion = 17.4.33213.308
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "BudgetTracker.WebApi", "src\BudgetTracker.WebApi\BudgetTracker.WebApi.csproj", "{B21125FE-7185-4E49-9A62-41CD596A2AE6}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BudgetTracker.DataModel", "src\BudgetTracker.DataModel\BudgetTracker.DataModel.csproj", "{FFA8CA41-BA04-4CAC-9B39-7345D15B65B9}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BudgetTracker.DataModel", "BudgetTracker.DataModel\BudgetTracker.DataModel.csproj", "{FFA8CA41-BA04-4CAC-9B39-7345D15B65B9}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
