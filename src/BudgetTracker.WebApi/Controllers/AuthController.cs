@@ -1,5 +1,7 @@
+using BudgetTracker.DataModel.Entities;
 using BudgetTracker.DataModel.Utils;
 using BudgetTracker.WebApi.TransferModels;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.IdentityModel.Tokens;
@@ -14,12 +16,12 @@ namespace BudgetTracker.WebApi.Controllers;
 public class AuthController : ControllerBase
 {
     private readonly ILogger<AuthController> _logger;
-    private readonly UserManager<IdentityUser> _userManager;
+    private readonly UserManager<ApplicationUser> _userManager;
     private readonly RoleManager<IdentityRole> _roleManager;
     private readonly IConfiguration _configuration;
 
     public AuthController(ILogger<AuthController> logger,
-                          UserManager<IdentityUser> userManager,
+                          UserManager<ApplicationUser> userManager,
                           RoleManager<IdentityRole> roleManager,
                           IConfiguration configuration)
     {
@@ -42,10 +44,10 @@ public class AuthController : ControllerBase
         var userRoles = await _userManager.GetRolesAsync(user);
 
         var authClaims = new List<Claim>
-            {
-                new Claim(ClaimTypes.Name, user.UserName),
-                new Claim(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString())
-            };
+        {
+            new Claim(ClaimTypes.Name, user.UserName),
+            new Claim(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString())
+        };
 
         foreach (var userRole in userRoles)
         {
@@ -75,13 +77,14 @@ public class AuthController : ControllerBase
             });
         }
 
-        var user = new IdentityUser
+        var user = new ApplicationUser
         {
             Email = request.Email,
             SecurityStamp = Guid.NewGuid().ToString(),
             UserName = request.Username
         };
         var result = await _userManager.CreateAsync(user, request.Password);
+        // TODO: How to propagate this to client side? Since they need to know if the password is weak.
         if (!result.Succeeded)
         {
             return StatusCode(StatusCodes.Status500InternalServerError,
@@ -99,6 +102,7 @@ public class AuthController : ControllerBase
         });
     }
 
+    [Authorize]
     [HttpPost]
     [Route("registerAdmin")]
     public async Task<IActionResult> RegisterAdmin(RegisterRequest request)
@@ -113,7 +117,7 @@ public class AuthController : ControllerBase
             });
         }
 
-        var user = new IdentityUser
+        var user = new ApplicationUser
         {
             Email = request.Email,
             SecurityStamp = Guid.NewGuid().ToString(),
@@ -152,8 +156,8 @@ public class AuthController : ControllerBase
         var authSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_configuration["JWT:Secret"]));
 
         var token = new JwtSecurityToken(
-            //issuer: _configuration["JWT:ValidIssuer"],
-            //audience: _configuration["JWT:ValidAudience"],
+            issuer: _configuration["JWT:ValidIssuer"],
+            audience: _configuration["JWT:ValidAudience"],
             expires: DateTime.Now.AddHours(3),
             claims: authClaims,
             signingCredentials: new SigningCredentials(authSigningKey, SecurityAlgorithms.HmacSha256)
