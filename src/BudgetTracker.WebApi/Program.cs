@@ -1,5 +1,5 @@
-using BudgetTracker.DataModel;
-using BudgetTracker.DataModel.Entities;
+using BudgetTracker.Core.Interfaces;
+using BudgetTracker.Infrastructure.Identity;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
@@ -11,15 +11,16 @@ var builder = WebApplication.CreateBuilder(args);
 var configuration = builder.Configuration;
 
 // Add services to the container.
+builder.Services.AddScoped<ITokenClaimService, IdentityTokenClaimService>();
 
 // Entity Framework
-builder.Services.AddDbContext<ApplicationContext>(
+builder.Services.AddDbContext<ApplicationDbContext>(
     options => options
         .UseNpgsql(configuration["DbConnection"]));
 
 // Identity
 builder.Services.AddIdentity<ApplicationUser, IdentityRole>()
-    .AddEntityFrameworkStores<ApplicationContext>()
+    .AddEntityFrameworkStores<ApplicationDbContext>()
     .AddDefaultTokenProviders();
 
 // Authentication

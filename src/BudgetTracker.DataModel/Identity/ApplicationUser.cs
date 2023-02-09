@@ -1,6 +1,6 @@
 ﻿using Microsoft.AspNetCore.Identity;
 
-namespace BudgetTracker.DataModel.Entities;
+namespace BudgetTracker.Infrastructure.Identity;
 
 public class ApplicationUser : IdentityUser
 {
