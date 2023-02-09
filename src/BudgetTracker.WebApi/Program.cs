@@ -78,8 +78,9 @@ builder.Services.AddSwaggerGen(c =>
 });
 
 var app = builder.Build();
+app.Logger.LogInformation("App created...");
 
-
+app.Logger.LogInformation("Seeding Database...");
 using (var scope = app.Services.CreateScope())
 {
     var scopedProvider = scope.ServiceProvider;
