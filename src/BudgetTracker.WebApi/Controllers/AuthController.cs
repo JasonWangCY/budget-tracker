@@ -4,15 +4,11 @@ using BudgetTracker.WebApi.TransferModels;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.IdentityModel.Tokens;
 using System.IdentityModel.Tokens.Jwt;
-using System.Security.Claims;
-using System.Text;
-using static BudgetTracker.Common.Constants;
 
 namespace BudgetTracker.WebApi.Controllers;
 
-// https://learn.microsoft.com/en-us/aspnet/core/security/authentication/identity-api-authorization?view=aspnetcore-6.0
+// TODO: https://learn.microsoft.com/en-us/aspnet/core/security/authentication/identity-api-authorization?view=aspnetcore-6.0
 [ApiController]
 [Route("api/[controller]")]
 public class AuthController : ControllerBase

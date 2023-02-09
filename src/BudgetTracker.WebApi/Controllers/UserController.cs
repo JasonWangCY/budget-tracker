@@ -94,10 +94,10 @@ public class UserController : ControllerBase
                               });
         }
 
-        if (await _roleManager.RoleExistsAsync(UserRoles.ADMIN))
-            await _userManager.AddToRoleAsync(user, UserRoles.ADMIN);
-        if (await _roleManager.RoleExistsAsync(UserRoles.ADMIN))
-            await _userManager.AddToRoleAsync(user, UserRoles.USER);
+        if (await _roleManager.RoleExistsAsync(UserRole.ADMIN))
+            await _userManager.AddToRoleAsync(user, UserRole.ADMIN);
+        if (await _roleManager.RoleExistsAsync(UserRole.ADMIN))
+            await _userManager.AddToRoleAsync(user, UserRole.USER);
 
         return Ok(new RegisterResponse
         {
