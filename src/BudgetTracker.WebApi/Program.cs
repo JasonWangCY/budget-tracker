@@ -14,9 +14,9 @@ var configuration = builder.Configuration;
 builder.Services.AddScoped<ITokenClaimService, IdentityTokenClaimService>();
 
 // Entity Framework
-builder.Services.AddDbContext<ApplicationDbContext>(
-    options => options
-        .UseNpgsql(configuration["DbConnection"]));
+builder.Services.AddDbContext<ApplicationDbContext>(options => 
+    options.UseNpgsql(configuration.GetConnectionString("DbConnection"))
+);
 
 // Identity
 builder.Services.AddIdentity<ApplicationUser, IdentityRole>()
@@ -32,8 +32,12 @@ builder.Services.AddAuthentication(options =>
 })
 .AddJwtBearer(options =>
  {
+     if (Environment.GetEnvironmentVariable("ASPNETCORE_ENVIRONMENT") == "Development")
+     {
+         options.RequireHttpsMetadata = false;
+     }
+     options.MapInboundClaims = false;
      options.SaveToken = true;
-     options.RequireHttpsMetadata = false;
      options.TokenValidationParameters = new TokenValidationParameters()
      {
          ValidateIssuer = true,
@@ -72,7 +76,7 @@ builder.Services.AddSwaggerGen(c =>
                     Id = "Bearer"
                 }
             },
-            new string[] {}
+            new List<string>()
         }
     });
 });

@@ -23,8 +23,8 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\..\BudgetTracker.Common\BudgetTracker.Common.csproj" />
-    <ProjectReference Include="..\BudgetTracker.DataModel\BudgetTracker.Infrastructure.csproj" />
+    <ProjectReference Include="..\BudgetTracker.Common\BudgetTracker.Common.csproj" />
+    <ProjectReference Include="..\BudgetTracker.Infrastructure\BudgetTracker.Infrastructure.csproj" />
   </ItemGroup>
 
 </Project>

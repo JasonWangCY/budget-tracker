@@ -26,7 +26,7 @@ public class ApplicationDbContextSeed
             Email = AuthorizationConstants.DEFAULT_USER_EMAIL
         };
         await userManager.CreateAsync(defaultUser, AuthorizationConstants.DEFAULT_USER_PASSWORD);
-        defaultUser = await userManager.FindByNameAsync(AuthorizationConstants.DEFAULT_ADMIN_NAME);
+        defaultUser = await userManager.FindByNameAsync(AuthorizationConstants.DEFAULT_USER_NAME);
         await userManager.AddToRoleAsync(defaultUser, UserRole.USER);
 
         // Create default admin
