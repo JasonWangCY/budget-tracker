@@ -29,7 +29,6 @@ public class AuthController : ControllerBase
 
     [HttpPost]
     [Route("auth")]
-    [Authorize]
     [AllowAnonymous]
     [ProducesResponseType(StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status401Unauthorized)]

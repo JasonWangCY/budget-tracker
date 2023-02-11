@@ -38,5 +38,6 @@ public class ApplicationDbContextSeed
         await userManager.CreateAsync(adminUser, AuthorizationConstants.DEFAULT_ADMIN_PASSWORD);
         adminUser = await userManager.FindByNameAsync(AuthorizationConstants.DEFAULT_ADMIN_NAME);
         await userManager.AddToRoleAsync(adminUser, UserRole.ADMIN);
+        await userManager.AddToRoleAsync(adminUser, UserRole.USER);
     }
 }

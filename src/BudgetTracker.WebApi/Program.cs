@@ -5,10 +5,15 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
+using Serilog.Events;
+using Serilog.Sinks.SystemConsole.Themes;
+using Serilog;
 using System.Text;
+using System.Security.Claims;
 
+SetUpLogger();
 var app = ConfigureBuilder().Build();
-app.Logger.LogInformation("App created...");
+Log.Information("App created...");
 await SeedDatabase(app);
 
 // Configure the HTTP request pipeline.
@@ -34,6 +39,8 @@ WebApplicationBuilder ConfigureBuilder()
 
     // Add services to the container.
     builder.Services.AddScoped<ITokenClaimService, IdentityTokenClaimService>();
+    builder.Services.AddLogging(x => x.AddSerilog())
+        .AddSingleton(Log.Logger);
 
     // Entity Framework
     builder.Services.AddDbContext<ApplicationDbContext>(options =>
@@ -42,8 +49,18 @@ WebApplicationBuilder ConfigureBuilder()
 
     // Identity
     builder.Services.AddIdentity<ApplicationUser, IdentityRole>()
+        .AddRoles<IdentityRole>()
         .AddEntityFrameworkStores<ApplicationDbContext>()
         .AddDefaultTokenProviders();
+    builder.Services.Configure<IdentityOptions>(options =>
+    {
+        options.Password.RequireDigit = true;
+        options.Password.RequireLowercase = true;
+        options.Password.RequireNonAlphanumeric = true;
+        options.Password.RequireUppercase = true;
+        options.Password.RequiredLength = 6;
+        options.Password.RequiredUniqueChars = 1;
+    });
 
     // Authentication
     builder.Services.AddAuthentication(options =>
@@ -58,15 +75,17 @@ WebApplicationBuilder ConfigureBuilder()
         {
             options.RequireHttpsMetadata = false;
         }
-        options.MapInboundClaims = false;
+        options.MapInboundClaims = true;
         options.SaveToken = true;
         options.TokenValidationParameters = new TokenValidationParameters()
         {
             ValidateIssuer = true,
             ValidateAudience = true,
+            ValidateLifetime = true,
+            ValidateIssuerSigningKey = true,
             ValidAudience = configuration["JWT:ValidAudience"],
             ValidIssuer = configuration["JWT:ValidIssuer"],
-            IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(configuration["JWT:Secret"]))
+            IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(configuration["JWT:Secret"])),
         };
     });
 
@@ -108,7 +127,7 @@ WebApplicationBuilder ConfigureBuilder()
 
 async Task SeedDatabase(WebApplication app)
 {
-    app.Logger.LogInformation("Seeding Database...");
+    Log.Information("Seeding Database...");
     using var scope = app.Services.CreateScope();
     var scopedProvider = scope.ServiceProvider;
     try
@@ -120,6 +139,18 @@ async Task SeedDatabase(WebApplication app)
     }
     catch (Exception ex)
     {
-        app.Logger.LogError(ex, "An error occurred seeding the DB.");
+        Log.Error(ex, "An error occurred seeding the DB.");
     }
+}
+
+static void SetUpLogger()
+{
+    var outputTemplateStr = "{Timestamp:yyyy-MM-dd HH:mm:ss} [{Level:u3}] {Message:lj}{NewLine}{Exception}";
+    Log.Logger = new LoggerConfiguration()
+        .MinimumLevel.Debug()
+        .MinimumLevel.Override("Microsoft", LogEventLevel.Information)
+        .MinimumLevel.Override("Microsoft.AspNetCore", LogEventLevel.Warning)
+        .MinimumLevel.Override("System", LogEventLevel.Warning)
+        .WriteTo.Console(restrictedToMinimumLevel: LogEventLevel.Debug, outputTemplate: outputTemplateStr, theme: AnsiConsoleTheme.Code)
+        .CreateLogger();
 }

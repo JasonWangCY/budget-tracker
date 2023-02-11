@@ -1,12 +1,9 @@
 ﻿using BudgetTracker.Core.Constants;
 using BudgetTracker.Core.Interfaces;
-using Microsoft.AspNetCore.Identity;
-using Microsoft.EntityFrameworkCore.Metadata.Internal;
 using Microsoft.IdentityModel.Tokens;
 using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 using System.Text;
-using System.Linq;
 
 namespace BudgetTracker.Infrastructure.Identity;
 
