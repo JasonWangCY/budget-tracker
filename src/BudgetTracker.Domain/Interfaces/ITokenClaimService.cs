@@ -1,6 +1,6 @@
 ﻿using Microsoft.IdentityModel.Tokens;
 
-namespace BudgetTracker.Core.Interfaces;
+namespace BudgetTracker.Domain.Interfaces;
 
 public interface ITokenClaimService
 {

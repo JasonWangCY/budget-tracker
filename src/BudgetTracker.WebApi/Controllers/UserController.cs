@@ -3,7 +3,7 @@ using BudgetTracker.WebApi.TransferModels;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
-using static BudgetTracker.Common.Constants;
+using static BudgetTracker.Application.Constants;
 
 namespace BudgetTracker.WebApi.Controllers;
 

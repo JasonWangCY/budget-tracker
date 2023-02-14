@@ -1,4 +1,4 @@
-using BudgetTracker.Core.Interfaces;
+using BudgetTracker.Domain.Interfaces;
 using BudgetTracker.Infrastructure.Identity;
 using BudgetTracker.WebApi.TransferModels;
 using Microsoft.AspNetCore.Authorization;

@@ -1,4 +1,3 @@
-using BudgetTracker.Core.Interfaces;
 using BudgetTracker.Infrastructure.Identity;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Identity;
@@ -10,6 +9,7 @@ using Serilog.Sinks.SystemConsole.Themes;
 using Serilog;
 using System.Text;
 using System.Security.Claims;
+using BudgetTracker.Domain.Interfaces;
 
 SetUpLogger();
 var app = ConfigureBuilder().Build();

@@ -1,4 +1,4 @@
-﻿namespace BudgetTracker.Common;
+﻿namespace BudgetTracker.Application;
 
 public static class Constants
 {

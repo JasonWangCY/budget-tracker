@@ -1,7 +1,7 @@
-﻿using BudgetTracker.Core.Constants;
+﻿using BudgetTracker.Domain.Constants;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
-using static BudgetTracker.Common.Constants;
+using static BudgetTracker.Application.Constants;
 
 namespace BudgetTracker.Infrastructure.Identity;
 

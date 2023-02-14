@@ -7,9 +7,9 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "BudgetTracker.WebApi", "Bud
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "BudgetTracker.Infrastructure", "BudgetTracker.Infrastructure\BudgetTracker.Infrastructure.csproj", "{FFA8CA41-BA04-4CAC-9B39-7345D15B65B9}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BudgetTracker.Common", "BudgetTracker.Common\BudgetTracker.Common.csproj", "{AE8E3F8F-0082-49DB-9A41-062A7424A29A}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "BudgetTracker.Application", "BudgetTracker.Application\BudgetTracker.Application.csproj", "{AE8E3F8F-0082-49DB-9A41-062A7424A29A}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BudgetTracker.Core", "BudgetTracker.Core\BudgetTracker.Core.csproj", "{43A07D63-BDCD-4616-9EA8-830BD69E177F}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "BudgetTracker.Domain", "BudgetTracker.Domain\BudgetTracker.Domain.csproj", "{43A07D63-BDCD-4616-9EA8-830BD69E177F}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
