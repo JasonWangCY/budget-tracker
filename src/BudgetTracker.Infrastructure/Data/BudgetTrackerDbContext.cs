@@ -1,4 +1,4 @@
-﻿using BudgetTracker.Domain.Entities.ExpenditureAggregate;
+﻿using BudgetTracker.Domain.Entities.TransactionAggregate;
 using Microsoft.EntityFrameworkCore;
 
 namespace BudgetTracker.Infrastructure.Data;

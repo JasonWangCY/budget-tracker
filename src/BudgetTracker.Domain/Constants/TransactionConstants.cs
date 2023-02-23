@@ -12,6 +12,12 @@ public static class TransactionConstants
         DefaultCategoryType.ENTERTAINMENT
     };
 
+    public static readonly List<string> TransactionTypes = new()
+    {
+        TransactionType.INCOME,
+        TransactionType.EXPENSE
+    };
+
     public static class DefaultCategoryType
     {
         public const string TRANSPORT = "TRANSPORT";
