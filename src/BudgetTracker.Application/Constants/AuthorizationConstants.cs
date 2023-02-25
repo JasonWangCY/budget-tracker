@@ -1,4 +1,4 @@
-﻿namespace BudgetTracker.Domain.Constants;
+﻿namespace BudgetTracker.Application.Constants;
 
 public static class AuthorizationConstants
 {

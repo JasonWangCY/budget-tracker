@@ -1,5 +1,5 @@
-﻿using BudgetTracker.Domain.Constants;
-using BudgetTracker.Domain.Interfaces;
+﻿using BudgetTracker.Application.Constants;
+using BudgetTracker.Application.Services.Interfaces;
 using Microsoft.IdentityModel.Tokens;
 using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
