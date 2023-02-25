@@ -2,6 +2,6 @@
 
 public abstract class BaseEntity
 {
-    public virtual int Id { get; protected set; }
     public DateTime CreatedAt { get; set; }
+    public DateTime LastModifiedTime { get; set; }
 }

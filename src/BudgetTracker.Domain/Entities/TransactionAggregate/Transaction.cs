@@ -8,16 +8,17 @@ public class Transaction : BaseEntity
     public Guid TransactionId { get; private set; }
     public decimal TransactionAmount { get; private set; }
     public string? Currency { get; private set; }
-    public List<CategoryType> Category { get; private set; } = null!;
     public string? Description { get; private set; } = null!;
-    public string TransactionType { get; private set; } = null!;
+    public TransactionType TransactionType { get; private set; } = null!;
+    public Category Category { get; private set; } = null!;
+    public User User { get; private set; } = null!;
 
     public Transaction(
         DateTime transactionDate,
         Guid transactionId,
         decimal transactionAmount,
         string? currency,
-        List<CategoryType> category,
+        Category category,
         string? description,
         string transactionType)
     {
