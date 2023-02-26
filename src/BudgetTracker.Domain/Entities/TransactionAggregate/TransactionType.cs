@@ -2,7 +2,8 @@
 
 public class TransactionType : BaseEntity
 {
-    public string Type { get; private set; } = null!;
+    public string TransactionTypeId { get; private set; } = null!;
+    public string TransactionTypeName { get; private set; } = null!;
     public string Description { get; private set; } = null!;
     public TransactionTypeSign Sign { get; private set; }
     public bool IsDefaultType { get; private set; } = false;
