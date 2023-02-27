@@ -19,6 +19,18 @@ public class TransactionService : ITransactionService
         _logger = logger;
     }
 
+    public async Task<List<Transaction>> ListTransactions(
+        DateTime startDate,
+        DateTime endDate,
+        string userId)
+    {
+        if (endDate < startDate)
+            throw new ApplicationException("End date cannot be earlier than start date!");
+
+        var transactions = await _unitOfWork.TransactionRepo.GetTransactionsWithinTimeRange(startDate, endDate, userId);
+        return transactions;
+    }
+
     public async Task AddTransaction(
         DateTime date,
         decimal amount,
@@ -40,6 +52,7 @@ public class TransactionService : ITransactionService
         var transactionId = Guid.NewGuid().ToString();
         var transaction = new Transaction(date, transactionId, amount, currency, description, transactionType, category, userId);
 
-        await _unitOfWork.TransactionRepo.Add(transaction);
+        _unitOfWork.TransactionRepo.Add(transaction);
+        await _unitOfWork.SaveChangesAsync();
     }
 }

@@ -5,13 +5,30 @@ namespace BudgetTracker.Infrastructure.Data.Persistence;
 
 public class UnitOfWork : IUnitOfWork
 {
-    public IUserRepository UserRepo => throw new NotImplementedException();
+    private readonly BudgetTrackerDbContext _dbContext;
+    private readonly IUserRepository _userRepo;
+    private readonly IBudgetRepository _budgetRepo;
+    private readonly ITransactionRepository _transactionRepo;
+    private readonly ICategoryRepository _categoryRepo;
 
-    public IBudgetRepository BudgetRepo => throw new NotImplementedException();
+    public UnitOfWork(
+        BudgetTrackerDbContext dbContext,
+        IUserRepository userRepo,
+        IBudgetRepository budgetRepo,
+        ITransactionRepository transactionRepo,
+        ICategoryRepository categoryRepo)
+    {
+        _dbContext = dbContext;
+        _userRepo = userRepo;
+        _budgetRepo = budgetRepo;
+        _transactionRepo = transactionRepo;
+        _categoryRepo = categoryRepo;
+    }
 
-    public ITransactionRepository TransactionRepo => throw new NotImplementedException();
-
-    public ICategoryRepository CategoryRepo => throw new NotImplementedException();
+    public IUserRepository UserRepo => _userRepo;
+    public IBudgetRepository BudgetRepo => _budgetRepo;
+    public ITransactionRepository TransactionRepo => _transactionRepo;
+    public ICategoryRepository CategoryRepo => _categoryRepo;
 
     public Task<int> SaveChangesAsync()
     {

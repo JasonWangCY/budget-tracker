@@ -1,6 +1,6 @@
 ﻿namespace BudgetTracker.Domain.PersistenceInterfaces;
 
-public interface IRepository<T> where T : class
+public interface IRepository
 {
-    Task Add(T entity);
+    void Add<TClass>(TClass entity);
 }

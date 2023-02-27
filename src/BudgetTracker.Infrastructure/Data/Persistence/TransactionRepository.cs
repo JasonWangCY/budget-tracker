@@ -3,9 +3,16 @@ using BudgetTracker.Domain.PersistenceInterfaces.Repositories;
 
 namespace BudgetTracker.Infrastructure.Data.Persistence;
 
-public class TransactionRepository : ITransactionRepository
+public class TransactionRepository : Repository, ITransactionRepository
 {
-    public Task Add(Transaction entity)
+    private readonly BudgetTrackerDbContext _dbContext;
+
+    public TransactionRepository(BudgetTrackerDbContext dbContext) : base(dbContext)
+    {
+        _dbContext = dbContext;
+    }
+
+    public Task<List<Transaction>> GetTransactionsWithinTimeRange(DateTime startDate, DateTime endDate, string userId)
     {
         throw new NotImplementedException();
     }
