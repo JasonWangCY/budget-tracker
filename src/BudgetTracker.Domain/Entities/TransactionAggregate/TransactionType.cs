@@ -7,6 +7,7 @@ public class TransactionType : BaseEntity
     public string Description { get; private set; } = null!;
     public TransactionTypeSign Sign { get; private set; }
     public bool IsDefaultType { get; private set; } = false;
+    public string? UserId { get; set; }
     public User? User { get; private set; }
     public List<Transaction> Transactions { get; private set; } = new();
 }

@@ -30,8 +30,9 @@ public class UnitOfWork : IUnitOfWork
     public ITransactionRepository TransactionRepo => _transactionRepo;
     public ICategoryRepository CategoryRepo => _categoryRepo;
 
-    public Task<int> SaveChangesAsync()
+    public async Task<int> SaveChangesAsync()
     {
-        throw new NotImplementedException();
+        var numberOfStatesWritten = await _dbContext.SaveChangesAsync();
+        return numberOfStatesWritten;
     }
 }

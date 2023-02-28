@@ -1,5 +1,6 @@
 ﻿using BudgetTracker.Domain.Entities;
 using BudgetTracker.Domain.PersistenceInterfaces.Repositories;
+using Microsoft.EntityFrameworkCore;
 
 namespace BudgetTracker.Infrastructure.Data.Persistence;
 
@@ -12,13 +13,15 @@ public class CategoryRepository : Repository, ICategoryRepository
         _dbContext = dbContext;
     }
 
-    public Task<Category> GetByCategoryAndUserId(string categoryId, string userId)
+    public async Task<Category?> GetByCategoryAndUserId(string categoryName, string userId)
     {
-        throw new NotImplementedException();
+        return await _dbContext.Categories
+            .FirstOrDefaultAsync(x => x.CategoryName == categoryName &&
+            x.UserId == userId);
     }
 
-    public Task<Category> GetById(string categoryId)
+    public async Task<Category?> GetById(string categoryId)
     {
-        throw new NotImplementedException();
+        return await _dbContext.Categories.FirstOrDefaultAsync(x => x.CategoryId == categoryId);
     }
 }

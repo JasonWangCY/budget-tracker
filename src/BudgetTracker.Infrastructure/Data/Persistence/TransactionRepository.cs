@@ -1,5 +1,6 @@
 ﻿using BudgetTracker.Domain.Entities.TransactionAggregate;
 using BudgetTracker.Domain.PersistenceInterfaces.Repositories;
+using Microsoft.EntityFrameworkCore;
 
 namespace BudgetTracker.Infrastructure.Data.Persistence;
 
@@ -12,13 +13,19 @@ public class TransactionRepository : Repository, ITransactionRepository
         _dbContext = dbContext;
     }
 
-    public Task<List<Transaction>> GetTransactionsWithinTimeRange(DateTime startDate, DateTime endDate, string userId)
+    public async Task<List<Transaction>> GetTransactionsWithinTimeRange(DateTime startDate, DateTime endDate, string userId)
     {
-        throw new NotImplementedException();
+        return await _dbContext.Transactions
+            .Where(x => x.UserId == userId &&
+            x.TransactionDate >= startDate &&
+            x.TransactionDate <= endDate)
+            .ToListAsync();
     }
 
-    public Task<TransactionType> GetTypeByUserId(string typeName, string userId)
+    public async Task<TransactionType?> GetTypeByUserId(string typeName, string userId)
     {
-        throw new NotImplementedException();
+        return await _dbContext.TransactionTypes
+            .FirstOrDefaultAsync(x => x.UserId == userId &&
+            x.TransactionTypeName == typeName);
     }
 }

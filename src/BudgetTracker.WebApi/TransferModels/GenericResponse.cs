@@ -1,4 +1,4 @@
-﻿namespace BudgetTracker.WebApi.Controllers;
+﻿namespace BudgetTracker.WebApi.TransferModels;
 
 public class GenericResponse
 {

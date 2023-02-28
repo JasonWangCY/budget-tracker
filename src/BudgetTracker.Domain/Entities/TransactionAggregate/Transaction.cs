@@ -7,6 +7,8 @@ public class Transaction : BaseEntity
     public decimal TransactionAmount { get; private set; }
     public string? Currency { get; private set; }
     public string? Description { get; private set; } = null!;
+    public string TransactionTypeId { get; private set; } = null!;
+    public string CategoryId { get; private set; } = null!;
     public TransactionType TransactionType { get; private set; } = null!;
     public Category Category { get; private set; } = null!;
     public string UserId { get; private set; } = null!;
