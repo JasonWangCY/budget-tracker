@@ -1,11 +1,12 @@
-﻿using Microsoft.EntityFrameworkCore.Migrations;
+﻿using System;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 
 #nullable disable
 
-namespace BudgetTracker.Infrastructure.Migrations
+namespace BudgetTracker.Infrastructure.Identity.Migrations
 {
-    public partial class Init : Migration
+    public partial class AppInit : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {

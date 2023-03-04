@@ -13,6 +13,10 @@ public class Transaction : BaseEntity
     public Category Category { get; private set; } = null!;
     public string UserId { get; private set; } = null!;
 
+    public Transaction()
+    {
+    }
+
     public Transaction(
         DateTime transactionDate,
         string transactionId,

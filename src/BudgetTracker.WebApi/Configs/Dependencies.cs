@@ -1,4 +1,5 @@
 ﻿using BudgetTracker.Application.Services.Interfaces;
+using BudgetTracker.Infrastructure.Data;
 using BudgetTracker.Infrastructure.Identity;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Identity;
@@ -19,6 +20,9 @@ public static class Dependencies
 
         // Entity Framework
         services.AddDbContext<ApplicationDbContext>(options => 
+            options.UseNpgsql(conf.GetConnectionString("DbConnection"))
+        );
+        services.AddDbContext<BudgetTrackerDbContext>(options =>
             options.UseNpgsql(conf.GetConnectionString("DbConnection"))
         );
 
