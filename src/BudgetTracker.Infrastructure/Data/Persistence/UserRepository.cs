@@ -1,24 +1,17 @@
 ﻿using BudgetTracker.Domain.Entities;
 using BudgetTracker.Domain.PersistenceInterfaces.Repositories;
+using Microsoft.EntityFrameworkCore;
 
 namespace BudgetTracker.Infrastructure.Data.Persistence;
 
-public class UserRepository : Repository, IUserRepository
+public class UserRepository : GenericRepository<User>, IUserRepository
 {
-    private readonly BudgetTrackerDbContext _dbContext;
-
     public UserRepository(BudgetTrackerDbContext dbContext) : base(dbContext)
     {
-        _dbContext = dbContext;
     }
 
-    public Task<User> GetById(string userId)
+    public async Task<User?> GetByUserName(string userName)
     {
-        throw new NotImplementedException();
-    }
-
-    public Task<User> GetByUserName(string userName)
-    {
-        throw new NotImplementedException();
+        return await dbSet.FirstOrDefaultAsync(x => x.UserName == userName);
     }
 }

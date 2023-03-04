@@ -1,5 +1,13 @@
 ﻿using BudgetTracker.Application.Services.Interfaces;
+using BudgetTracker.Domain.Entities;
+using BudgetTracker.Domain.Entities.BudgetAggregate;
+using BudgetTracker.Domain.Entities.TransactionAggregate;
+using BudgetTracker.Domain.PersistenceInterfaces;
+using BudgetTracker.Domain.PersistenceInterfaces.Repositories;
+using BudgetTracker.Domain.Services;
+using BudgetTracker.Domain.Services.Interfaces;
 using BudgetTracker.Infrastructure.Data;
+using BudgetTracker.Infrastructure.Data.Persistence;
 using BudgetTracker.Infrastructure.Identity;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Identity;
@@ -16,14 +24,21 @@ public static class Dependencies
     public static IServiceCollection RegisterServices(this IServiceCollection services, IConfiguration conf)
     {
         services.AddLogging(x => x.AddSerilog())
-            .AddSingleton(Log.Logger);
+            .AddSingleton(Log.Logger)
+            .AddScoped<ITransactionService, TransactionService>()
+            .AddScoped<IUserService, UserService>();
 
+        return services;
+    }
+
+    public static IServiceCollection RegisterDatabase(this IServiceCollection services, IConfiguration conf)
+    {
         // Entity Framework
-        services.AddDbContext<ApplicationDbContext>(options => 
-            options.UseNpgsql(conf.GetConnectionString("DbConnection"))
+        services.AddDbContext<ApplicationDbContext>(options =>
+            options.UseNpgsql(conf.GetConnectionString("DbConnection")).UseSnakeCaseNamingConvention()
         );
         services.AddDbContext<BudgetTrackerDbContext>(options =>
-            options.UseNpgsql(conf.GetConnectionString("DbConnection"))
+            options.UseNpgsql(conf.GetConnectionString("DbConnection")).UseSnakeCaseNamingConvention()
         );
 
         // Identity
@@ -40,6 +55,18 @@ public static class Dependencies
             options.Password.RequiredLength = 6;
             options.Password.RequiredUniqueChars = 1;
         });
+
+        // Unit of work + repository pattern
+        services.AddScoped<IUnitOfWork, UnitOfWork>()
+            .AddScoped<IBudgetRepository, BudgetRepository>()
+            .AddScoped<ICategoryRepository, CategoryRepository>()
+            .AddScoped<ITransactionRepository, TransactionRepository>()
+            .AddScoped<IUserRepository, UserRepository>();
+
+        services.AddScoped<IGenericRepository<Budget>, GenericRepository<Budget>>()
+            .AddScoped<IGenericRepository<Category>, GenericRepository<Category>>()
+            .AddScoped<IGenericRepository<Transaction>, GenericRepository<Transaction>>()
+            .AddScoped<IGenericRepository<User>, GenericRepository<User>>();
 
         return services;
     }

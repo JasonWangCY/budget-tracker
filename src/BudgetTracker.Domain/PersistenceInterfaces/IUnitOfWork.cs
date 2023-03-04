@@ -5,8 +5,8 @@ namespace BudgetTracker.Domain.PersistenceInterfaces;
 public interface IUnitOfWork
 {
     Task<int> SaveChangesAsync();
-    IUserRepository UserRepo { get; }
-    IBudgetRepository BudgetRepo { get; }
-    ITransactionRepository TransactionRepo { get; }
-    ICategoryRepository CategoryRepo { get; }
+    IUserRepository Users { get; }
+    IBudgetRepository Budgets { get; }
+    ITransactionRepository Transactions { get; }
+    ICategoryRepository Categories { get; }
 }

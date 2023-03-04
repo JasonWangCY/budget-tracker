@@ -1,4 +1,5 @@
-﻿using BudgetTracker.Infrastructure.Identity;
+﻿using BudgetTracker.Domain.Services.Interfaces;
+using BudgetTracker.Infrastructure.Identity;
 using BudgetTracker.WebApi.TransferModels;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
@@ -13,11 +14,14 @@ namespace BudgetTracker.WebApi.Controllers;
 public class UserController : ControllerBase
 {
     private readonly UserManager<ApplicationUser> _userManager;
+    private readonly IUserService _userService;
 
     public UserController(
-        UserManager<ApplicationUser> userManager)
+        UserManager<ApplicationUser> userManager,
+        IUserService userService)
     {
         _userManager = userManager;
+        _userService = userService;
     }
 
     [HttpGet]
@@ -46,13 +50,14 @@ public class UserController : ControllerBase
 
         var user = new ApplicationUser
         {
+            UserName = request.UserName,
+            FirstName = request.FirstName,
+            LastName = request.LastName,
             Email = request.Email,
             SecurityStamp = Guid.NewGuid().ToString(),
-            UserName = request.UserName
         };
         var result = await _userManager.CreateAsync(user, request.Password);
 
-        // TODO: How to propagate this to client side? Since they need to know if the password is weak.
         if (!result.Succeeded)
         {
             return StatusCode(StatusCodes.Status500InternalServerError, new RegisterResponse
@@ -62,6 +67,8 @@ public class UserController : ControllerBase
             });
         }
 
+        // TODO: What if system crashes here?
+        await _userService.AddUser(user.Id, user.UserName, user.FirstName, user.LastName);
         return Ok(new RegisterResponse
         {
             Status = RegisterStatus.SUCCESS,
@@ -88,9 +95,11 @@ public class UserController : ControllerBase
 
         var user = new ApplicationUser
         {
+            UserName = request.UserName,
+            FirstName = request.FirstName,
+            LastName = request.LastName,
             Email = request.Email,
             SecurityStamp = Guid.NewGuid().ToString(),
-            UserName = request.UserName
         };
         var result = await _userManager.CreateAsync(user, request.Password);
         if (!result.Succeeded)
@@ -102,6 +111,7 @@ public class UserController : ControllerBase
             });
         }
 
+        await _userService.AddUser(user.Id, user.UserName, user.FirstName, user.LastName);
         return Ok(new RegisterResponse
         {
             Status = RegisterStatus.SUCCESS,

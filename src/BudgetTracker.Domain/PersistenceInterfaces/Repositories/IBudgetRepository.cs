@@ -2,6 +2,6 @@
 
 namespace BudgetTracker.Domain.PersistenceInterfaces.Repositories;
 
-public interface IBudgetRepository : IRepository
+public interface IBudgetRepository : IGenericRepository<Budget>
 {
 }

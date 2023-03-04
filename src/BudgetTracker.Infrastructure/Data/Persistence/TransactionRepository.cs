@@ -4,7 +4,7 @@ using Microsoft.EntityFrameworkCore;
 
 namespace BudgetTracker.Infrastructure.Data.Persistence;
 
-public class TransactionRepository : Repository, ITransactionRepository
+public class TransactionRepository : GenericRepository<Transaction>, ITransactionRepository
 {
     private readonly BudgetTrackerDbContext _dbContext;
 
@@ -13,15 +13,32 @@ public class TransactionRepository : Repository, ITransactionRepository
         _dbContext = dbContext;
     }
 
-    public async Task<List<Transaction>> GetTransactionsWithinTimeRange(DateTime startDate, DateTime endDate, string userId)
+    public async Task<List<Transaction>> GetTransactionsWithinDateRange(DateTime startDate, DateTime endDate, string userId)
     {
-        return await _dbContext.Transactions
+        return await dbSet
             .Where(x => x.UserId == userId &&
             x.TransactionDate >= startDate &&
             x.TransactionDate <= endDate)
             .ToListAsync();
     }
 
+    public async Task<List<Transaction>> GetTransactionsBeforeDate(DateTime endDate, string userId)
+    {
+        return await dbSet
+            .Where(x => x.UserId == userId &&
+            x.TransactionDate <= endDate)
+            .ToListAsync();
+    }
+
+    public async Task<List<Transaction>> GetTransactionsAfterDate(DateTime startDate, string userId)
+    {
+        return await dbSet
+            .Where(x => x.UserId == userId &&
+            x.TransactionDate >= startDate)
+            .ToListAsync();
+    }
+
+    // TODO: Implement CQRS.
     public async Task<TransactionType?> GetTypeByUserId(string typeName, string userId)
     {
         return await _dbContext.TransactionTypes

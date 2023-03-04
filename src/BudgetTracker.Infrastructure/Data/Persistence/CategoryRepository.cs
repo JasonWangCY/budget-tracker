@@ -4,24 +4,14 @@ using Microsoft.EntityFrameworkCore;
 
 namespace BudgetTracker.Infrastructure.Data.Persistence;
 
-public class CategoryRepository : Repository, ICategoryRepository
+public class CategoryRepository : GenericRepository<Category>, ICategoryRepository
 {
-    private readonly BudgetTrackerDbContext _dbContext;
-
     public CategoryRepository(BudgetTrackerDbContext dbContext) : base(dbContext)
     {
-        _dbContext = dbContext;
     }
 
     public async Task<Category?> GetByCategoryAndUserId(string categoryName, string userId)
     {
-        return await _dbContext.Categories
-            .FirstOrDefaultAsync(x => x.CategoryName == categoryName &&
-            x.UserId == userId);
-    }
-
-    public async Task<Category?> GetById(string categoryId)
-    {
-        return await _dbContext.Categories.FirstOrDefaultAsync(x => x.CategoryId == categoryId);
+        return await dbSet.FirstOrDefaultAsync(x => x.CategoryName == categoryName && x.UserId == userId);
     }
 }

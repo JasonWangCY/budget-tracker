@@ -2,8 +2,7 @@
 
 namespace BudgetTracker.Domain.PersistenceInterfaces.Repositories;
 
-public interface IUserRepository
+public interface IUserRepository : IGenericRepository<User>
 {
-    Task<User> GetByUserName(string userName);
-    Task<User> GetById(string userId);
+    Task<User?> GetByUserName(string userName);
 }

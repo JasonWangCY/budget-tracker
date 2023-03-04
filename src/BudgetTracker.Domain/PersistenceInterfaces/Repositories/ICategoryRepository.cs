@@ -2,8 +2,7 @@
 
 namespace BudgetTracker.Domain.PersistenceInterfaces.Repositories;
 
-public interface ICategoryRepository : IRepository
+public interface ICategoryRepository : IGenericRepository<Category>
 {
-    Task<Category?> GetById(string categoryId);
     Task<Category?> GetByCategoryAndUserId(string categoryId, string userId);
 }

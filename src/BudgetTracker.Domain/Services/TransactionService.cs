@@ -20,15 +20,32 @@ public class TransactionService : ITransactionService
     }
 
     public async Task<List<Transaction>> ListTransactions(
-        DateTime startDate,
-        DateTime endDate,
+        DateTime? startDate,
+        DateTime? endDate,
         string userId)
     {
-        if (endDate < startDate)
-            throw new ApplicationException("End date cannot be earlier than start date!");
+        var hasStartDate = startDate != null;
+        var hasEndDate = endDate != null;
 
-        var transactions = await _unitOfWork.TransactionRepo.GetTransactionsWithinTimeRange(startDate, endDate, userId);
-        return transactions;
+        if (hasStartDate && !hasEndDate)
+        {
+            var startDateValue = startDate!.Value;
+            return await _unitOfWork.Transactions.GetTransactionsAfterDate(startDateValue, userId);
+        }
+        else if (!hasStartDate && hasEndDate)
+        {
+            var endDateValue = endDate!.Value;
+            return await _unitOfWork.Transactions.GetTransactionsBeforeDate(endDateValue, userId);
+        }
+        else
+        {
+            var startDateValue = startDate!.Value;
+            var endDateValue = endDate!.Value;
+            if (endDateValue < startDateValue)
+                throw new ApplicationException("End date cannot be earlier than start date!");
+
+            return await _unitOfWork.Transactions.GetTransactionsWithinDateRange(startDateValue, endDateValue, userId);
+        }
     }
 
     public async Task AddTransaction(
@@ -41,18 +58,18 @@ public class TransactionService : ITransactionService
         string userId
         )
     {
-        var category = await _unitOfWork.CategoryRepo.GetByCategoryAndUserId(categoryName, userId);
+        var category = await _unitOfWork.Categories.GetByCategoryAndUserId(categoryName, userId);
         if (category == null)
             throw new CategoryNotFoundException(categoryName);
 
-        var transactionType = await _unitOfWork.TransactionRepo.GetTypeByUserId(transactionTypeName, userId);
+        var transactionType = await _unitOfWork.Transactions.GetTypeByUserId(transactionTypeName, userId);
         if (transactionType == null)
             throw new TransactionTypeNotFoundException(transactionTypeName);
 
         var transactionId = Guid.NewGuid().ToString();
         var transaction = new Transaction(date, transactionId, amount, currency, description, transactionType, category, userId);
 
-        _unitOfWork.TransactionRepo.Add(transaction);
+        _unitOfWork.Transactions.Add(transaction);
         await _unitOfWork.SaveChangesAsync();
     }
 }

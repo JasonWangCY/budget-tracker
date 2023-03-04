@@ -13,7 +13,7 @@ public class Transaction : BaseEntity
     public Category Category { get; private set; } = null!;
     public string UserId { get; private set; } = null!;
 
-    public Transaction()
+    private Transaction()
     {
     }
 

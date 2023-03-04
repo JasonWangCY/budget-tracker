@@ -27,7 +27,7 @@ public class TransactionController : ControllerBase
     [Route("list")]
     [Authorize(Roles = UserRole.USER)]
     [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(List<ListTransactionsResponse>))]
-    public async Task<IActionResult> ListTransactions(DateTime startDate, DateTime endDate)
+    public async Task<IActionResult> ListTransactions(DateTime? startDate=null, DateTime? endDate=null)
     {
         var userId = _userManager.GetUserId(User);
         var transactions = await _transactionService.ListTransactions(startDate, endDate, userId);

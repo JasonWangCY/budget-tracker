@@ -6,29 +6,24 @@ namespace BudgetTracker.Infrastructure.Data.Persistence;
 public class UnitOfWork : IUnitOfWork
 {
     private readonly BudgetTrackerDbContext _dbContext;
-    private readonly IUserRepository _userRepo;
-    private readonly IBudgetRepository _budgetRepo;
-    private readonly ITransactionRepository _transactionRepo;
-    private readonly ICategoryRepository _categoryRepo;
+    public IUserRepository Users { get; private set; }
+    public IBudgetRepository Budgets { get; private set; }
+    public ITransactionRepository Transactions { get; private set; }
+    public ICategoryRepository Categories { get; private set; }
 
     public UnitOfWork(
         BudgetTrackerDbContext dbContext,
-        IUserRepository userRepo,
-        IBudgetRepository budgetRepo,
-        ITransactionRepository transactionRepo,
-        ICategoryRepository categoryRepo)
+        IUserRepository users,
+        IBudgetRepository budgets,
+        ITransactionRepository transactions,
+        ICategoryRepository categories)
     {
         _dbContext = dbContext;
-        _userRepo = userRepo;
-        _budgetRepo = budgetRepo;
-        _transactionRepo = transactionRepo;
-        _categoryRepo = categoryRepo;
+        Users = users;
+        Budgets = budgets;
+        Transactions = transactions;
+        Categories = categories;
     }
-
-    public IUserRepository UserRepo => _userRepo;
-    public IBudgetRepository BudgetRepo => _budgetRepo;
-    public ITransactionRepository TransactionRepo => _transactionRepo;
-    public ICategoryRepository CategoryRepo => _categoryRepo;
 
     public async Task<int> SaveChangesAsync()
     {
