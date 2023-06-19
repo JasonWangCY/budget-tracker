@@ -1,4 +1,5 @@
 ﻿using BudgetTracker.Application.Services.Interfaces;
+using BudgetTracker.Application.Utils;
 using BudgetTracker.Domain.Entities;
 using BudgetTracker.Domain.Entities.BudgetAggregate;
 using BudgetTracker.Domain.Entities.TransactionAggregate;
@@ -83,7 +84,7 @@ public static class Dependencies
         })
         .AddJwtBearer(options =>
         {
-            if (Environment.GetEnvironmentVariable("ASPNETCORE_ENVIRONMENT") == "Development")
+            if (EnvironmentManager.GetAspDotNetEnvironment() == Environments.Development)
             {
                 options.RequireHttpsMetadata = false;
             }

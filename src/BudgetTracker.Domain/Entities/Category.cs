@@ -7,5 +7,5 @@ public class Category
     public string? Description { get; private set; }
     public bool IsDefaultCategory { get; private set;} = false;
     public string UserId { get; set; } = null!;
-    public User User { get; private set; } = new();
+    public User User { get; private set; } = null!;
 }

@@ -25,200 +25,260 @@ namespace BudgetTracker.Infrastructure.Data.Migrations
             modelBuilder.Entity("BudgetTracker.Domain.Entities.BudgetAggregate.Budget", b =>
                 {
                     b.Property<string>("BudgetId")
-                        .HasColumnType("text");
+                        .HasColumnType("text")
+                        .HasColumnName("budget_id");
 
                     b.Property<string>("BudgetName")
                         .IsRequired()
-                        .HasColumnType("text");
+                        .HasColumnType("text")
+                        .HasColumnName("budget_name");
 
                     b.Property<DateTime>("CreatedAt")
-                        .HasColumnType("timestamp with time zone");
+                        .HasColumnType("timestamp with time zone")
+                        .HasColumnName("created_at");
 
                     b.Property<string>("Description")
-                        .HasColumnType("text");
+                        .HasColumnType("text")
+                        .HasColumnName("description");
 
                     b.Property<DateTime>("EndDate")
-                        .HasColumnType("timestamp with time zone");
+                        .HasColumnType("timestamp with time zone")
+                        .HasColumnName("end_date");
 
                     b.Property<DateTime>("LastModifiedTime")
-                        .HasColumnType("timestamp with time zone");
+                        .HasColumnType("timestamp with time zone")
+                        .HasColumnName("last_modified_time");
 
                     b.Property<decimal>("SpendingLimit")
-                        .HasColumnType("numeric");
+                        .HasColumnType("numeric")
+                        .HasColumnName("spending_limit");
 
                     b.Property<DateTime>("StartDate")
-                        .HasColumnType("timestamp with time zone");
+                        .HasColumnType("timestamp with time zone")
+                        .HasColumnName("start_date");
 
                     b.Property<string>("UserId")
                         .IsRequired()
-                        .HasColumnType("text");
+                        .HasColumnType("text")
+                        .HasColumnName("user_id");
 
-                    b.HasKey("BudgetId");
+                    b.HasKey("BudgetId")
+                        .HasName("pk_budgets");
 
-                    b.HasIndex("UserId");
+                    b.HasIndex("UserId")
+                        .HasDatabaseName("ix_budgets_user_id");
 
-                    b.ToTable("Budgets");
+                    b.ToTable("budgets", (string)null);
                 });
 
             modelBuilder.Entity("BudgetTracker.Domain.Entities.BudgetAggregate.BudgetCategory", b =>
                 {
                     b.Property<string>("BudgetId")
-                        .HasColumnType("text");
+                        .HasColumnType("text")
+                        .HasColumnName("budget_id");
 
                     b.Property<string>("CategoryId")
-                        .HasColumnType("text");
+                        .HasColumnType("text")
+                        .HasColumnName("category_id");
 
-                    b.HasKey("BudgetId", "CategoryId");
+                    b.HasKey("BudgetId", "CategoryId")
+                        .HasName("pk_budget_category");
 
-                    b.HasIndex("CategoryId");
+                    b.HasIndex("CategoryId")
+                        .HasDatabaseName("ix_budget_category_category_id");
 
-                    b.ToTable("BudgetCategory");
+                    b.ToTable("budget_category", (string)null);
                 });
 
             modelBuilder.Entity("BudgetTracker.Domain.Entities.BudgetAggregate.BudgetTransactionType", b =>
                 {
                     b.Property<string>("BudgetId")
-                        .HasColumnType("text");
+                        .HasColumnType("text")
+                        .HasColumnName("budget_id");
 
                     b.Property<string>("TransactionTypeId")
-                        .HasColumnType("text");
+                        .HasColumnType("text")
+                        .HasColumnName("transaction_type_id");
 
-                    b.HasKey("BudgetId", "TransactionTypeId");
+                    b.HasKey("BudgetId", "TransactionTypeId")
+                        .HasName("pk_budget_transaction_type");
 
-                    b.HasIndex("TransactionTypeId");
+                    b.HasIndex("TransactionTypeId")
+                        .HasDatabaseName("ix_budget_transaction_type_transaction_type_id");
 
-                    b.ToTable("BudgetTransactionType");
+                    b.ToTable("budget_transaction_type", (string)null);
                 });
 
             modelBuilder.Entity("BudgetTracker.Domain.Entities.Category", b =>
                 {
                     b.Property<string>("CategoryId")
-                        .HasColumnType("text");
+                        .HasColumnType("text")
+                        .HasColumnName("category_id");
 
                     b.Property<string>("CategoryName")
                         .IsRequired()
-                        .HasColumnType("text");
+                        .HasColumnType("text")
+                        .HasColumnName("category_name");
 
                     b.Property<string>("Description")
-                        .HasColumnType("text");
+                        .HasColumnType("text")
+                        .HasColumnName("description");
 
                     b.Property<bool>("IsDefaultCategory")
-                        .HasColumnType("boolean");
+                        .HasColumnType("boolean")
+                        .HasColumnName("is_default_category");
 
                     b.Property<string>("UserId")
                         .IsRequired()
-                        .HasColumnType("text");
+                        .HasColumnType("text")
+                        .HasColumnName("user_id");
 
-                    b.HasKey("CategoryId");
+                    b.HasKey("CategoryId")
+                        .HasName("pk_categories");
 
-                    b.HasIndex("UserId");
+                    b.HasIndex("UserId")
+                        .HasDatabaseName("ix_categories_user_id");
 
-                    b.ToTable("Categories");
+                    b.ToTable("categories", (string)null);
                 });
 
             modelBuilder.Entity("BudgetTracker.Domain.Entities.TransactionAggregate.Transaction", b =>
                 {
                     b.Property<string>("TransactionId")
-                        .HasColumnType("text");
+                        .HasColumnType("text")
+                        .HasColumnName("transaction_id");
 
                     b.Property<string>("CategoryId")
                         .IsRequired()
-                        .HasColumnType("text");
+                        .HasColumnType("text")
+                        .HasColumnName("category_id");
 
                     b.Property<DateTime>("CreatedAt")
-                        .HasColumnType("timestamp with time zone");
+                        .HasColumnType("timestamp with time zone")
+                        .HasColumnName("created_at");
 
                     b.Property<string>("Currency")
-                        .HasColumnType("text");
+                        .HasColumnType("text")
+                        .HasColumnName("currency");
 
                     b.Property<string>("Description")
-                        .HasColumnType("text");
+                        .HasColumnType("text")
+                        .HasColumnName("description");
 
                     b.Property<DateTime>("LastModifiedTime")
-                        .HasColumnType("timestamp with time zone");
+                        .HasColumnType("timestamp with time zone")
+                        .HasColumnName("last_modified_time");
 
                     b.Property<decimal>("TransactionAmount")
-                        .HasColumnType("numeric");
+                        .HasColumnType("numeric")
+                        .HasColumnName("transaction_amount");
 
                     b.Property<DateTime>("TransactionDate")
-                        .HasColumnType("timestamp with time zone");
+                        .HasColumnType("timestamp with time zone")
+                        .HasColumnName("transaction_date");
 
                     b.Property<string>("TransactionTypeId")
                         .IsRequired()
-                        .HasColumnType("text");
+                        .HasColumnType("text")
+                        .HasColumnName("transaction_type_id");
 
                     b.Property<string>("UserId")
                         .IsRequired()
-                        .HasColumnType("text");
+                        .HasColumnType("text")
+                        .HasColumnName("user_id");
 
-                    b.HasKey("TransactionId");
+                    b.HasKey("TransactionId")
+                        .HasName("pk_transactions");
 
-                    b.HasIndex("CategoryId");
+                    b.HasIndex("CategoryId")
+                        .HasDatabaseName("ix_transactions_category_id");
 
-                    b.HasIndex("TransactionTypeId");
+                    b.HasIndex("TransactionTypeId")
+                        .HasDatabaseName("ix_transactions_transaction_type_id");
 
-                    b.HasIndex("UserId");
+                    b.HasIndex("UserId")
+                        .HasDatabaseName("ix_transactions_user_id");
 
-                    b.ToTable("Transactions");
+                    b.ToTable("transactions", (string)null);
                 });
 
             modelBuilder.Entity("BudgetTracker.Domain.Entities.TransactionAggregate.TransactionType", b =>
                 {
                     b.Property<string>("TransactionTypeId")
-                        .HasColumnType("text");
+                        .HasColumnType("text")
+                        .HasColumnName("transaction_type_id");
 
                     b.Property<DateTime>("CreatedAt")
-                        .HasColumnType("timestamp with time zone");
+                        .HasColumnType("timestamp with time zone")
+                        .HasColumnName("created_at");
 
                     b.Property<string>("Description")
                         .IsRequired()
-                        .HasColumnType("text");
+                        .HasColumnType("text")
+                        .HasColumnName("description");
 
                     b.Property<bool>("IsDefaultType")
-                        .HasColumnType("boolean");
+                        .HasColumnType("boolean")
+                        .HasColumnName("is_default_type");
 
                     b.Property<DateTime>("LastModifiedTime")
-                        .HasColumnType("timestamp with time zone");
+                        .HasColumnType("timestamp with time zone")
+                        .HasColumnName("last_modified_time");
 
                     b.Property<int>("Sign")
-                        .HasColumnType("integer");
+                        .HasColumnType("integer")
+                        .HasColumnName("sign");
 
                     b.Property<string>("TransactionTypeName")
                         .IsRequired()
-                        .HasColumnType("text");
+                        .HasColumnType("text")
+                        .HasColumnName("transaction_type_name");
 
                     b.Property<string>("UserId")
-                        .HasColumnType("text");
+                        .HasColumnType("text")
+                        .HasColumnName("user_id");
 
-                    b.HasKey("TransactionTypeId");
+                    b.HasKey("TransactionTypeId")
+                        .HasName("pk_transaction_types");
 
-                    b.HasIndex("UserId");
+                    b.HasIndex("UserId")
+                        .HasDatabaseName("ix_transaction_types_user_id");
 
-                    b.ToTable("TransactionTypes");
+                    b.ToTable("transaction_types", (string)null);
                 });
 
             modelBuilder.Entity("BudgetTracker.Domain.Entities.User", b =>
                 {
                     b.Property<string>("UserId")
-                        .HasColumnType("text");
+                        .HasColumnType("text")
+                        .HasColumnName("user_id");
 
                     b.Property<decimal>("CurrentBalance")
-                        .HasColumnType("numeric");
+                        .HasColumnType("numeric")
+                        .HasColumnName("current_balance");
 
                     b.Property<string>("FirstName")
                         .IsRequired()
-                        .HasColumnType("text");
+                        .HasColumnType("text")
+                        .HasColumnName("first_name");
+
+                    b.Property<string>("LastName")
+                        .HasColumnType("text")
+                        .HasColumnName("last_name");
 
                     b.Property<bool>("UseDarkMode")
-                        .HasColumnType("boolean");
+                        .HasColumnType("boolean")
+                        .HasColumnName("use_dark_mode");
 
                     b.Property<string>("UserName")
                         .IsRequired()
-                        .HasColumnType("text");
+                        .HasColumnType("text")
+                        .HasColumnName("user_name");
 
-                    b.HasKey("UserId");
+                    b.HasKey("UserId")
+                        .HasName("pk_users");
 
-                    b.ToTable("Users");
+                    b.ToTable("users", (string)null);
                 });
 
             modelBuilder.Entity("BudgetTracker.Domain.Entities.BudgetAggregate.Budget", b =>
@@ -227,7 +287,8 @@ namespace BudgetTracker.Infrastructure.Data.Migrations
                         .WithMany()
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                        .IsRequired()
+                        .HasConstraintName("fk_budgets_users_user_id");
 
                     b.Navigation("User");
                 });
@@ -238,13 +299,15 @@ namespace BudgetTracker.Infrastructure.Data.Migrations
                         .WithMany("BudgetCategories")
                         .HasForeignKey("BudgetId")
                         .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                        .IsRequired()
+                        .HasConstraintName("fk_budget_category_budgets_budget_id");
 
                     b.HasOne("BudgetTracker.Domain.Entities.Category", "Category")
                         .WithMany()
                         .HasForeignKey("CategoryId")
                         .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                        .IsRequired()
+                        .HasConstraintName("fk_budget_category_categories_category_id");
 
                     b.Navigation("Budget");
 
@@ -257,13 +320,15 @@ namespace BudgetTracker.Infrastructure.Data.Migrations
                         .WithMany("BudgetTransactionTypes")
                         .HasForeignKey("BudgetId")
                         .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                        .IsRequired()
+                        .HasConstraintName("fk_budget_transaction_type_budgets_budget_id");
 
                     b.HasOne("BudgetTracker.Domain.Entities.TransactionAggregate.TransactionType", "TransactionType")
                         .WithMany()
                         .HasForeignKey("TransactionTypeId")
                         .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                        .IsRequired()
+                        .HasConstraintName("fk_budget_transaction_type_transaction_types_transaction_type_");
 
                     b.Navigation("Budget");
 
@@ -276,7 +341,8 @@ namespace BudgetTracker.Infrastructure.Data.Migrations
                         .WithMany()
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                        .IsRequired()
+                        .HasConstraintName("fk_categories_users_user_id");
 
                     b.Navigation("User");
                 });
@@ -287,19 +353,22 @@ namespace BudgetTracker.Infrastructure.Data.Migrations
                         .WithMany()
                         .HasForeignKey("CategoryId")
                         .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                        .IsRequired()
+                        .HasConstraintName("fk_transactions_categories_category_id");
 
                     b.HasOne("BudgetTracker.Domain.Entities.TransactionAggregate.TransactionType", "TransactionType")
                         .WithMany("Transactions")
                         .HasForeignKey("TransactionTypeId")
                         .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                        .IsRequired()
+                        .HasConstraintName("fk_transactions_transaction_types_transaction_type_id");
 
                     b.HasOne("BudgetTracker.Domain.Entities.User", null)
                         .WithMany()
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                        .IsRequired()
+                        .HasConstraintName("fk_transactions_users_user_id");
 
                     b.Navigation("Category");
 
@@ -310,7 +379,8 @@ namespace BudgetTracker.Infrastructure.Data.Migrations
                 {
                     b.HasOne("BudgetTracker.Domain.Entities.User", "User")
                         .WithMany()
-                        .HasForeignKey("UserId");
+                        .HasForeignKey("UserId")
+                        .HasConstraintName("fk_transaction_types_users_user_id");
 
                     b.Navigation("User");
                 });

@@ -69,7 +69,7 @@ public class TransactionService : ITransactionService
         var transactionId = Guid.NewGuid().ToString();
         var transaction = new Transaction(date, transactionId, amount, currency, description, transactionType, category, userId);
 
-        _unitOfWork.Transactions.Add(transaction);
+        await _unitOfWork.Transactions.Add(transaction);
         await _unitOfWork.SaveChangesAsync();
     }
 }

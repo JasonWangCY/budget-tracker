@@ -1,5 +1,6 @@
 ﻿using BudgetTracker.Application.Constants;
 using BudgetTracker.Domain.Services;
+using BudgetTracker.Domain.Services.Interfaces;
 using BudgetTracker.Infrastructure.Data;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
@@ -14,7 +15,7 @@ public class ApplicationDbContextSeed
         BudgetTrackerDbContext budgetTrackerDbContext,
         UserManager<ApplicationUser> userManager,
         RoleManager<IdentityRole> roleManager,
-        UserService userService)
+        IUserService userService)
     {
         if (applicationDbContext.Database.IsNpgsql())
         {

@@ -1,4 +1,5 @@
-﻿using BudgetTracker.Domain.Services.Interfaces;
+﻿using BudgetTracker.Application.Utils;
+using BudgetTracker.Domain.Services.Interfaces;
 using BudgetTracker.Infrastructure.Identity;
 using BudgetTracker.WebApi.TransferModels;
 using Microsoft.AspNetCore.Authorization;
@@ -57,13 +58,12 @@ public class UserController : ControllerBase
             SecurityStamp = Guid.NewGuid().ToString(),
         };
         var result = await _userManager.CreateAsync(user, request.Password);
-
         if (!result.Succeeded)
         {
             return StatusCode(StatusCodes.Status500InternalServerError, new RegisterResponse
             {
                 Status = RegisterStatus.ERROR,
-                Message = "User creation failed! Please check user details and try again."
+                Message = result.Errors.Select(x => x.Code).DumpJson()
             });
         }
 

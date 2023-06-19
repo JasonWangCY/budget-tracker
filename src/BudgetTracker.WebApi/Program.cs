@@ -1,9 +1,14 @@
 using Serilog;
 using BudgetTracker.WebApi.Configs;
+using BudgetTracker.Application.Utils;
+using BudgetTracker.WebApi.Middleware;
 
 SetupConfigs.SetUpLogger();
 var app = ConfigureBuilder().Build();
-await SetupConfigs.SeedDatabase(app);
+if (EnvironmentManager.GetSeedDb())
+{
+    await SetupConfigs.SeedDatabase(app);
+}
 
 // Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())
@@ -13,6 +18,7 @@ if (app.Environment.IsDevelopment())
 }
 
 app.UseHttpsRedirection();
+app.UseMiddleware<ExceptionMiddleware>();
 
 app.UseAuthentication();
 app.UseAuthorization();

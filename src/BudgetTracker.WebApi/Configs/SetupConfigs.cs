@@ -4,7 +4,7 @@ using Serilog;
 using BudgetTracker.Infrastructure.Identity;
 using Microsoft.AspNetCore.Identity;
 using BudgetTracker.Infrastructure.Data;
-using BudgetTracker.Domain.Services;
+using BudgetTracker.Domain.Services.Interfaces;
 
 namespace BudgetTracker.WebApi.Configs;
 
@@ -33,7 +33,7 @@ public static class SetupConfigs
             var roleManager = scopedProvider.GetRequiredService<RoleManager<IdentityRole>>();
             var identityContext = scopedProvider.GetRequiredService<ApplicationDbContext>();
             var budgetTrackerContext = scopedProvider.GetRequiredService<BudgetTrackerDbContext>();
-            var userService = scopedProvider.GetRequiredService<UserService>();
+            var userService = scopedProvider.GetRequiredService<IUserService>();
             await ApplicationDbContextSeed.SeedAsync(identityContext, budgetTrackerContext, userManager, roleManager, userService);
         }
         catch (Exception ex)
