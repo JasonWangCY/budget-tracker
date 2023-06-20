@@ -9,6 +9,7 @@ using System.IdentityModel.Tokens.Jwt;
 namespace BudgetTracker.WebApi.Controllers;
 
 // TODO: https://learn.microsoft.com/en-us/aspnet/core/security/authentication/identity-api-authorization?view=aspnetcore-6.0
+[Authorize]
 [ApiController]
 [Route("api/[controller]")]
 public class AuthController : ControllerBase

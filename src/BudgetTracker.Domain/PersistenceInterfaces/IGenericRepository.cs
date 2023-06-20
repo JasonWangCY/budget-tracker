@@ -1,9 +1,8 @@
-﻿using System.Linq.Expressions;
+﻿namespace BudgetTracker.Domain.PersistenceInterfaces;
 
-namespace BudgetTracker.Domain.PersistenceInterfaces;
-
-public interface IGenericRepository<TClass> where TClass : class
+public interface IGenericRepository<TClass> where TClass : class, IAggregateRoot
 {
-    Task<TClass?> GetById(string id);
-    Task Add(TClass entity);
+    Task<TClass?> GetByIdAsync(string id);
+    Task AddAsync(TClass entity);
+    Task AddRangeAsync(IEnumerable<TClass> entities);
 }

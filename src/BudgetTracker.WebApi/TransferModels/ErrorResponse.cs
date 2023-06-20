@@ -4,6 +4,6 @@ namespace BudgetTracker.WebApi.TransferModels;
 
 public class ErrorResponse
 {
-    public int StatusCode { get; set; }
-    public string Message { get; set; } = null!;
+    public int StatusCode { get; init; }
+    public string Message { get; init; } = null!;
 }

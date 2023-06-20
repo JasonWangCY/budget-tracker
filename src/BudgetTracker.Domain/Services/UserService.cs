@@ -22,7 +22,7 @@ public class UserService : IUserService
     {
         var user = new User(userId, userName, firstName, lastName);
 
-        _unitOfWork.Users.Add(user);
+        await _unitOfWork.Users.AddAsync(user);
         await _unitOfWork.SaveChangesAsync();
     }
 }

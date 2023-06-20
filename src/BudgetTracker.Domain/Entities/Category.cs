@@ -1,6 +1,8 @@
-﻿namespace BudgetTracker.Domain.Entities;
+﻿using BudgetTracker.Domain.PersistenceInterfaces;
 
-public class Category
+namespace BudgetTracker.Domain.Entities;
+
+public class Category : IAggregateRoot
 {
     public string CategoryId { get; private set; } = null!;
     public string CategoryName { get; private set; } = null!;

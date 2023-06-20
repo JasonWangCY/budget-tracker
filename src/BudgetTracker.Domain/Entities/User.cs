@@ -1,6 +1,8 @@
-﻿namespace BudgetTracker.Domain.Entities;
+﻿using BudgetTracker.Domain.PersistenceInterfaces;
 
-public class User
+namespace BudgetTracker.Domain.Entities;
+
+public class User : IAggregateRoot
 {
     public string UserId { get; private set; } = null!;
     public string UserName { get; private set; } = null!;

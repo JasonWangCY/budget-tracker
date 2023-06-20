@@ -1,10 +1,9 @@
 ﻿using BudgetTracker.Domain.PersistenceInterfaces;
 using Microsoft.EntityFrameworkCore;
-using System.Linq.Expressions;
 
 namespace BudgetTracker.Infrastructure.Data.Persistence;
 
-public class GenericRepository<TClass> : IGenericRepository<TClass> where TClass : class
+public class GenericRepository<TClass> : IGenericRepository<TClass> where TClass : class, IAggregateRoot
 {
     internal DbSet<TClass> dbSet;
 
@@ -13,13 +12,18 @@ public class GenericRepository<TClass> : IGenericRepository<TClass> where TClass
         dbSet = dbContext.Set<TClass>();
     }
 
-    public virtual async Task<TClass?> GetById(string id)
+    public virtual async Task<TClass?> GetByIdAsync(string id)
     {
         return await dbSet.FindAsync(id);
     }
 
-    public virtual async Task Add(TClass entity)
+    public virtual async Task AddAsync(TClass entity)
     {
         await dbSet.AddAsync(entity);
+    }
+
+    public virtual async Task AddRangeAsync(IEnumerable<TClass> entities)
+    {
+        await dbSet.AddRangeAsync(entities);
     }
 }

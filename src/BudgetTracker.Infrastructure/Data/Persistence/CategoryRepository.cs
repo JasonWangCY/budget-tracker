@@ -10,8 +10,18 @@ public class CategoryRepository : GenericRepository<Category>, ICategoryReposito
     {
     }
 
-    public async Task<Category?> GetByCategoryAndUserId(string categoryName, string userId)
+    public async Task<List<Category>> GetCategoriesIncludingDefaultAsync(string userId)
     {
-        return await dbSet.FirstOrDefaultAsync(x => x.CategoryName == categoryName && x.UserId == userId);
+        return await dbSet.Where(x => x.UserId == userId || x.IsDefaultCategory).ToListAsync();
+    }
+
+    public async Task<Category?> GetCategory(string categoryId, string userId)
+    {
+        return await dbSet.FirstOrDefaultAsync(x => x.CategoryId == categoryId && x.UserId == userId);
+    }
+
+    public async Task<List<Category>> GetCategories(IEnumerable<string> categoryIds, string userId)
+    {
+        return await dbSet.Where(x => x.UserId == userId && categoryIds.Contains(x.CategoryId)).ToListAsync();
     }
 }

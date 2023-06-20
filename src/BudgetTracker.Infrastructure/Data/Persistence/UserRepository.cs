@@ -10,7 +10,7 @@ public class UserRepository : GenericRepository<User>, IUserRepository
     {
     }
 
-    public async Task<User?> GetByUserName(string userName)
+    public async Task<User?> GetByUserNameAsync(string userName)
     {
         return await dbSet.FirstOrDefaultAsync(x => x.UserName == userName);
     }

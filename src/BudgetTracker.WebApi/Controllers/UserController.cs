@@ -2,6 +2,7 @@
 using BudgetTracker.Domain.Services.Interfaces;
 using BudgetTracker.Infrastructure.Identity;
 using BudgetTracker.WebApi.TransferModels;
+using BudgetTracker.WebApi.Utils;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
@@ -67,7 +68,6 @@ public class UserController : ControllerBase
             });
         }
 
-        // TODO: What if system crashes here?
         await _userService.AddUser(user.Id, user.UserName, user.FirstName, user.LastName);
         return Ok(new RegisterResponse
         {
@@ -78,7 +78,7 @@ public class UserController : ControllerBase
 
     [HttpPost]
     [Route("registerAdmin")]
-    [Authorize(Roles = UserRole.ADMIN)]
+    [AuthorizeRoles(UserRole.ADMIN)]
     [ProducesResponseType(StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status500InternalServerError, Type = typeof(RegisterResponse))]
     public async Task<IActionResult> RegisterAdmin(RegisterRequest request)

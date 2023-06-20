@@ -1,22 +1,19 @@
-﻿using BudgetTracker.Domain.Entities.TransactionAggregate;
+﻿using BudgetTracker.Domain.Entities;
+using BudgetTracker.Domain.Entities.TransactionAggregate;
 using BudgetTracker.Domain.Exceptions;
 using BudgetTracker.Domain.PersistenceInterfaces;
 using BudgetTracker.Domain.Services.Interfaces;
-using Microsoft.Extensions.Logging;
 
 namespace BudgetTracker.Domain.Services;
 
 public class TransactionService : ITransactionService
 {
     private readonly IUnitOfWork _unitOfWork;
-    private readonly ILogger<TransactionService> _logger;
 
     public TransactionService(
-        IUnitOfWork unitOfWork,
-        ILogger<TransactionService> logger)
+        IUnitOfWork unitOfWork)
     {
         _unitOfWork = unitOfWork;
-        _logger = logger;
     }
 
     public async Task<List<Transaction>> ListTransactions(
@@ -30,12 +27,12 @@ public class TransactionService : ITransactionService
         if (hasStartDate && !hasEndDate)
         {
             var startDateValue = startDate!.Value;
-            return await _unitOfWork.Transactions.GetTransactionsAfterDate(startDateValue, userId);
+            return await _unitOfWork.Transactions.GetTransactionsAfterDateAsync(startDateValue, userId);
         }
         else if (!hasStartDate && hasEndDate)
         {
             var endDateValue = endDate!.Value;
-            return await _unitOfWork.Transactions.GetTransactionsBeforeDate(endDateValue, userId);
+            return await _unitOfWork.Transactions.GetTransactionsBeforeDateAsync(endDateValue, userId);
         }
         else
         {
@@ -44,32 +41,28 @@ public class TransactionService : ITransactionService
             if (endDateValue < startDateValue)
                 throw new ApplicationException("End date cannot be earlier than start date!");
 
-            return await _unitOfWork.Transactions.GetTransactionsWithinDateRange(startDateValue, endDateValue, userId);
+            return await _unitOfWork.Transactions.GetTransactionsWithinDateRangeAsync(startDateValue, endDateValue, userId);
         }
     }
 
-    public async Task AddTransaction(
-        DateTime date,
-        decimal amount,
-        string? currency,
-        string? description,
-        string transactionTypeName,
-        string categoryName,
-        string userId
-        )
+    public async Task<(List<Category>, List<TransactionType>)> GetCategoriesAndTransactionTypes(
+        string userId,
+        IEnumerable<string> categoryIds,
+        IEnumerable<string> transactionTypeIds)
     {
-        var category = await _unitOfWork.Categories.GetByCategoryAndUserId(categoryName, userId);
-        if (category == null)
-            throw new CategoryNotFoundException(categoryName);
+        var getCategoryTask = _unitOfWork.Categories.GetCategories(categoryIds, userId);
+        var getTransactionTypeTask = _unitOfWork.Transactions.GetTransactionTypes(transactionTypeIds, userId);
+        await Task.WhenAll(getCategoryTask, getTransactionTypeTask);
 
-        var transactionType = await _unitOfWork.Transactions.GetTypeByUserId(transactionTypeName, userId);
-        if (transactionType == null)
-            throw new TransactionTypeNotFoundException(transactionTypeName);
+        var categories = getCategoryTask.Result;
+        var transactionTypes = getTransactionTypeTask.Result;
+        return (categories, transactionTypes);
+    }
 
-        var transactionId = Guid.NewGuid().ToString();
-        var transaction = new Transaction(date, transactionId, amount, currency, description, transactionType, category, userId);
-
-        await _unitOfWork.Transactions.Add(transaction);
+    public async Task AddTransactions(List<Transaction> transactions)
+    {
+        // TODO: Handle possible exceptions?
+        await _unitOfWork.Transactions.AddRangeAsync(transactions);
         await _unitOfWork.SaveChangesAsync();
     }
 }

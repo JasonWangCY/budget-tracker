@@ -13,7 +13,7 @@ public class TransactionRepository : GenericRepository<Transaction>, ITransactio
         _dbContext = dbContext;
     }
 
-    public async Task<List<Transaction>> GetTransactionsWithinDateRange(DateTime startDate, DateTime endDate, string userId)
+    public async Task<List<Transaction>> GetTransactionsWithinDateRangeAsync(DateTime startDate, DateTime endDate, string userId)
     {
         return await dbSet
             .Where(x => x.UserId == userId &&
@@ -22,7 +22,7 @@ public class TransactionRepository : GenericRepository<Transaction>, ITransactio
             .ToListAsync();
     }
 
-    public async Task<List<Transaction>> GetTransactionsBeforeDate(DateTime endDate, string userId)
+    public async Task<List<Transaction>> GetTransactionsBeforeDateAsync(DateTime endDate, string userId)
     {
         return await dbSet
             .Where(x => x.UserId == userId &&
@@ -30,7 +30,7 @@ public class TransactionRepository : GenericRepository<Transaction>, ITransactio
             .ToListAsync();
     }
 
-    public async Task<List<Transaction>> GetTransactionsAfterDate(DateTime startDate, string userId)
+    public async Task<List<Transaction>> GetTransactionsAfterDateAsync(DateTime startDate, string userId)
     {
         return await dbSet
             .Where(x => x.UserId == userId &&
@@ -39,10 +39,17 @@ public class TransactionRepository : GenericRepository<Transaction>, ITransactio
     }
 
     // TODO: Implement CQRS.
-    public async Task<TransactionType?> GetTypeByUserId(string typeName, string userId)
+    public async Task<TransactionType?> GetTransactionType(string typeId, string userId)
     {
         return await _dbContext.TransactionTypes
             .FirstOrDefaultAsync(x => x.UserId == userId &&
-            x.TransactionTypeName == typeName);
+            x.TransactionTypeId== typeId);
+    }
+
+    public async Task<List<TransactionType>> GetTransactionTypes(IEnumerable<string> typeIds, string userId)
+    {
+        return await _dbContext.TransactionTypes
+            .Where(x => x.UserId == userId &&
+            typeIds.Contains(x.TransactionTypeId)).ToListAsync();
     }
 }

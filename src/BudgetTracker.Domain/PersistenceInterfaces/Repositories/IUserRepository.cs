@@ -4,5 +4,5 @@ namespace BudgetTracker.Domain.PersistenceInterfaces.Repositories;
 
 public interface IUserRepository : IGenericRepository<User>
 {
-    Task<User?> GetByUserName(string userName);
+    Task<User?> GetByUserNameAsync(string userName);
 }

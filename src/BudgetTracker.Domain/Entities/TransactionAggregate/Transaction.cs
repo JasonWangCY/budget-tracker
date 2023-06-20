@@ -1,6 +1,8 @@
-﻿namespace BudgetTracker.Domain.Entities.TransactionAggregate;
+﻿using BudgetTracker.Domain.PersistenceInterfaces;
 
-public class Transaction : BaseEntity
+namespace BudgetTracker.Domain.Entities.TransactionAggregate;
+
+public class Transaction : BaseEntity, IAggregateRoot
 {
     public DateTime TransactionDate { get; private set; }
     public string TransactionId { get; private set; } = null!;
@@ -38,7 +40,7 @@ public class Transaction : BaseEntity
         SetTransactionAmount(transactionAmount);
     }
     
-    public void SetTransactionAmount(decimal transactionAmount)
+    private void SetTransactionAmount(decimal transactionAmount)
     {
         TransactionAmount = Math.Abs(transactionAmount);
     }

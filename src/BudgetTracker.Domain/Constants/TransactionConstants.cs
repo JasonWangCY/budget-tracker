@@ -12,10 +12,10 @@ public static class TransactionConstants
         DefaultCategoryType.ENTERTAINMENT
     };
 
-    public static readonly List<string> TransactionTypes = new()
+    public static readonly List<string> DefaultTransactionTypes = new()
     {
-        TransactionType.INCOME,
-        TransactionType.EXPENSE
+        DefaultTransactionType.INCOME,
+        DefaultTransactionType.EXPENSE
     };
 
     public static class DefaultCategoryType
@@ -28,7 +28,7 @@ public static class TransactionConstants
         public const string ENTERTAINMENT = "ENTERTAINMENT";
     }
 
-    public static class TransactionType
+    public static class DefaultTransactionType
     {
         public const string EXPENSE = "EXPENSE";
         public const string INCOME = "INCOME";
