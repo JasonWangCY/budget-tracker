@@ -17,6 +17,7 @@ public class Transaction : BaseEntity, IAggregateRoot
 
     private Transaction()
     {
+        // Used by EF Core migration.
     }
 
     public Transaction(

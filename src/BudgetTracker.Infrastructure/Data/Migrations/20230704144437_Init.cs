@@ -17,7 +17,6 @@ namespace BudgetTracker.Infrastructure.Data.Migrations
                     user_name = table.Column<string>(type: "text", nullable: false),
                     first_name = table.Column<string>(type: "text", nullable: false),
                     last_name = table.Column<string>(type: "text", nullable: true),
-                    use_dark_mode = table.Column<bool>(type: "boolean", nullable: false),
                     current_balance = table.Column<decimal>(type: "numeric", nullable: false)
                 },
                 constraints: table =>
@@ -58,7 +57,7 @@ namespace BudgetTracker.Infrastructure.Data.Migrations
                     category_name = table.Column<string>(type: "text", nullable: false),
                     description = table.Column<string>(type: "text", nullable: true),
                     is_default_category = table.Column<bool>(type: "boolean", nullable: false),
-                    user_id = table.Column<string>(type: "text", nullable: false)
+                    user_id = table.Column<string>(type: "text", nullable: true)
                 },
                 constraints: table =>
                 {
@@ -67,8 +66,7 @@ namespace BudgetTracker.Infrastructure.Data.Migrations
                         name: "fk_categories_users_user_id",
                         column: x => x.user_id,
                         principalTable: "users",
-                        principalColumn: "user_id",
-                        onDelete: ReferentialAction.Cascade);
+                        principalColumn: "user_id");
                 });
 
             migrationBuilder.CreateTable(

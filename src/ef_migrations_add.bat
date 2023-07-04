@@ -1,4 +1,4 @@
-dotnet ef migrations add AppInit -c ApplicationDbContext ^
+dotnet ef migrations add IdentityInit -c ApplicationDbContext ^
 -p BudgetTracker.Infrastructure\BudgetTracker.Infrastructure.csproj ^
 -s BudgetTracker.WebApi\BudgetTracker.WebApi.csproj ^
 -o Identity\Migrations

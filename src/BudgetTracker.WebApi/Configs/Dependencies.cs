@@ -10,6 +10,8 @@ using BudgetTracker.Domain.Services.Interfaces;
 using BudgetTracker.Infrastructure.Data;
 using BudgetTracker.Infrastructure.Data.Persistence;
 using BudgetTracker.Infrastructure.Identity;
+using BudgetTracker.WebApi.Services;
+using BudgetTracker.WebApi.Services.Interfaces;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
@@ -22,12 +24,14 @@ namespace BudgetTracker.WebApi.Configs;
 
 public static class Dependencies
 {
-    public static IServiceCollection RegisterServices(this IServiceCollection services, IConfiguration conf)
+    public static IServiceCollection RegisterServices(this IServiceCollection services)
     {
         services.AddLogging(x => x.AddSerilog())
             .AddSingleton(Log.Logger)
             .AddScoped<ITransactionService, TransactionService>()
-            .AddScoped<IUserService, UserService>();
+            .AddScoped<IUserService, UserService>()
+            .AddScoped<ICategoryService, CategoryService>()
+            .AddScoped<IDtoConverter, DtoConverter>();
 
         return services;
     }
@@ -67,7 +71,7 @@ public static class Dependencies
         services.AddScoped<IGenericRepository<Budget>, GenericRepository<Budget>>()
             .AddScoped<IGenericRepository<Category>, GenericRepository<Category>>()
             .AddScoped<IGenericRepository<Transaction>, GenericRepository<Transaction>>()
-            .AddScoped<IGenericRepository<User>, GenericRepository<User>>();
+            .AddScoped<IGenericRepository<Domain.Entities.User>, GenericRepository<Domain.Entities.User>>();
 
         return services;
     }

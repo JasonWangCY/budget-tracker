@@ -18,8 +18,23 @@ public class CategoryService : ICategoryService
         return await _unitOfWork.Categories.GetCategoriesIncludingDefaultAsync(userId);
     }
 
-    public async Task AddCategories()
+    public async Task AddCategories(IEnumerable<Category> categories)
     {
+        await _unitOfWork.Categories.AddRangeAsync(categories);
+        await _unitOfWork.SaveChangesAsync();
+    }
 
+    public async Task DeleteCategories(IEnumerable<string> categoryIds, string userId)
+    {
+        var categoriesToDelete = await _unitOfWork.Categories.GetCategories(categoryIds, userId);
+        _unitOfWork.Categories.DeleteRange(categoriesToDelete);
+        await _unitOfWork.SaveChangesAsync();
+    }
+
+    public async Task DeleteDefaultCategories(IEnumerable<string> categoryIds)
+    {
+        var categoriesToDelete = await _unitOfWork.Categories.GetDefaultCategories(categoryIds);
+        _unitOfWork.Categories.DeleteRange(categoriesToDelete);
+        await _unitOfWork.SaveChangesAsync();
     }
 }

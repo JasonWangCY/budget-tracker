@@ -24,4 +24,14 @@ public class CategoryRepository : GenericRepository<Category>, ICategoryReposito
     {
         return await dbSet.Where(x => x.UserId == userId && categoryIds.Contains(x.CategoryId)).ToListAsync();
     }
+
+    public async Task<List<Category>> GetDefaultCategories(IEnumerable<string> categoryIds)
+    {
+        return await dbSet.Where(x => x.IsDefaultCategory && categoryIds.Contains(x.CategoryId)).ToListAsync();
+    }
+
+    public void DeleteRange(IEnumerable<Category> categoriesToRemove)
+    {
+        dbSet.RemoveRange(categoriesToRemove);
+    }
 }

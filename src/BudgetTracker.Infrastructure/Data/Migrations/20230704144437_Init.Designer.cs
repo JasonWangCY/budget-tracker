@@ -12,7 +12,7 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace BudgetTracker.Infrastructure.Data.Migrations
 {
     [DbContext(typeof(BudgetTrackerDbContext))]
-    [Migration("20230619145807_Init")]
+    [Migration("20230704144437_Init")]
     partial class Init
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -131,7 +131,6 @@ namespace BudgetTracker.Infrastructure.Data.Migrations
                         .HasColumnName("is_default_category");
 
                     b.Property<string>("UserId")
-                        .IsRequired()
                         .HasColumnType("text")
                         .HasColumnName("user_id");
 
@@ -268,10 +267,6 @@ namespace BudgetTracker.Infrastructure.Data.Migrations
                         .HasColumnType("text")
                         .HasColumnName("last_name");
 
-                    b.Property<bool>("UseDarkMode")
-                        .HasColumnType("boolean")
-                        .HasColumnName("use_dark_mode");
-
                     b.Property<string>("UserName")
                         .IsRequired()
                         .HasColumnType("text")
@@ -342,8 +337,6 @@ namespace BudgetTracker.Infrastructure.Data.Migrations
                     b.HasOne("BudgetTracker.Domain.Entities.User", "User")
                         .WithMany()
                         .HasForeignKey("UserId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired()
                         .HasConstraintName("fk_categories_users_user_id");
 
                     b.Navigation("User");

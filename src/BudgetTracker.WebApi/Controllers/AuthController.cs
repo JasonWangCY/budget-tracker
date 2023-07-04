@@ -46,7 +46,7 @@ public class AuthController : ControllerBase
 
         var issuer = _configuration["JWT:ValidIssuer"];
         var audience = _configuration["JWT:ValidAudience"];
-        var token = _tokenClaimService.GetToken(user.UserName, userRoles, issuer, audience);
+        var token = _tokenClaimService.GetToken(user.UserName, user.Id, userRoles, issuer, audience);
 
         return Ok(new AuthResponse
         {

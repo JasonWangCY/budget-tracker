@@ -1,4 +1,5 @@
-﻿using BudgetTracker.Domain.Entities.TransactionAggregate;
+﻿using BudgetTracker.Application.Utils;
+using BudgetTracker.Domain.Entities.TransactionAggregate;
 using BudgetTracker.Domain.Exceptions;
 using BudgetTracker.Domain.Services.Interfaces;
 using BudgetTracker.Infrastructure.Identity;
@@ -7,6 +8,7 @@ using BudgetTracker.WebApi.Utils;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
+using System.Globalization;
 using static BudgetTracker.Application.Constants.Constants;
 
 namespace BudgetTracker.WebApi.Controllers;
@@ -31,10 +33,22 @@ public class TransactionController : ControllerBase
     [Route("listTransactions")]
     [AuthorizeRoles(UserRole.ADMIN, UserRole.USER)]
     [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(List<TransactionDto>))]
-    public async Task<IActionResult> ListTransactions(DateTime? startDate=null, DateTime? endDate=null)
+    public async Task<IActionResult> ListTransactions(string? startDate=null, string? endDate=null)
     {
+        var isStartDateValid = DateTime.TryParseExact(startDate, "yyyyMMdd", CultureInfo.InvariantCulture,
+            DateTimeStyles.AdjustToUniversal, out var startDateExact);
+        var isEndDateValid = DateTime.TryParseExact(endDate, "yyyyMMdd", CultureInfo.InvariantCulture,
+            DateTimeStyles.AdjustToUniversal, out var endDateExact);
+        startDateExact = startDateExact.SetKindUtc();
+        endDateExact = endDateExact.SetKindUtc();
+
+        if (!isStartDateValid || !isEndDateValid)
+        {
+            return BadRequest("The start date and end date are not valid date times!");
+        }
+
         var userId = _userManager.GetUserId(User);
-        var transactions = await _transactionService.ListTransactions(startDate, endDate, userId);
+        var transactions = await _transactionService.ListTransactions(startDateExact, endDateExact, userId);
         var transactionDtos = transactions.Select(x => new TransactionDto
         {
             TransactionId = x.TransactionId,
@@ -86,4 +100,6 @@ public class TransactionController : ControllerBase
 
         return Ok(new GenericResponse { HasError = false });
     }
+
+    // TODO: Add transaction type, remove stuff
 }

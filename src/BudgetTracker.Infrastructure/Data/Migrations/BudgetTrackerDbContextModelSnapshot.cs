@@ -129,7 +129,6 @@ namespace BudgetTracker.Infrastructure.Data.Migrations
                         .HasColumnName("is_default_category");
 
                     b.Property<string>("UserId")
-                        .IsRequired()
                         .HasColumnType("text")
                         .HasColumnName("user_id");
 
@@ -266,10 +265,6 @@ namespace BudgetTracker.Infrastructure.Data.Migrations
                         .HasColumnType("text")
                         .HasColumnName("last_name");
 
-                    b.Property<bool>("UseDarkMode")
-                        .HasColumnType("boolean")
-                        .HasColumnName("use_dark_mode");
-
                     b.Property<string>("UserName")
                         .IsRequired()
                         .HasColumnType("text")
@@ -340,8 +335,6 @@ namespace BudgetTracker.Infrastructure.Data.Migrations
                     b.HasOne("BudgetTracker.Domain.Entities.User", "User")
                         .WithMany()
                         .HasForeignKey("UserId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired()
                         .HasConstraintName("fk_categories_users_user_id");
 
                     b.Navigation("User");

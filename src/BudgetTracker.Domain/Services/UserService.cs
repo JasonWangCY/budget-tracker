@@ -25,4 +25,10 @@ public class UserService : IUserService
         await _unitOfWork.Users.AddAsync(user);
         await _unitOfWork.SaveChangesAsync();
     }
+
+    // TODO: Add a caching layer here since this function will be used very often.
+    public async Task<User?> GetByUserId(string userId)
+    {
+        return await _unitOfWork.Users.GetByIdAsync(userId);
+    }
 }

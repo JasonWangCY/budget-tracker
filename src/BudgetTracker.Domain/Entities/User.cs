@@ -8,7 +8,6 @@ public class User : IAggregateRoot
     public string UserName { get; private set; } = null!;
     public string FirstName { get; private set; } = null!;
     public string? LastName { get; set; }
-    public bool UseDarkMode { get; private set; } = true;
     public decimal CurrentBalance { get; private set; }
 
     private User()

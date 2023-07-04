@@ -32,7 +32,7 @@ WebApplicationBuilder ConfigureBuilder()
     var builder = WebApplication.CreateBuilder(args);
     var conf = builder.Configuration;
 
-    builder.Services.RegisterServices(conf)
+    builder.Services.RegisterServices()
         .RegisterDatabase(conf)
         .RegisterAuth(conf)
         .ConfigApi();

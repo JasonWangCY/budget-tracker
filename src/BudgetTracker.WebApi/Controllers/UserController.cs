@@ -38,6 +38,7 @@ public class UserController : ControllerBase
     [AllowAnonymous]
     [ProducesResponseType(StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status500InternalServerError, Type = typeof(RegisterResponse))]
+    // TODO: Potential issue: what if system crashes between saving in Identity DB and saving in Domain DB?
     public async Task<ActionResult<RegisterResponse>> Register(RegisterRequest request)
     {
         var userExists = await _userManager.FindByNameAsync(request.UserName);
@@ -81,6 +82,7 @@ public class UserController : ControllerBase
     [AuthorizeRoles(UserRole.ADMIN)]
     [ProducesResponseType(StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status500InternalServerError, Type = typeof(RegisterResponse))]
+    // TODO: Potential issue: what if system crashes between saving in Identity DB and saving in Domain DB?
     public async Task<IActionResult> RegisterAdmin(RegisterRequest request)
     {
         var userExists = await _userManager.FindByNameAsync(request.UserName);

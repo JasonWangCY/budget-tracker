@@ -17,10 +17,8 @@ public class ApplicationDbContextSeed
         RoleManager<IdentityRole> roleManager,
         IUserService userService)
     {
-        if (applicationDbContext.Database.IsNpgsql())
-        {
-            await applicationDbContext.Database.MigrateAsync();
-        }
+        await MigrateDatabase(applicationDbContext);
+        await MigrateDatabase(budgetTrackerDbContext);
 
         foreach (var userRole in UserRoles)
         {
@@ -51,5 +49,13 @@ public class ApplicationDbContextSeed
         await userManager.AddToRoleAsync(adminUser, UserRole.ADMIN);
         await userManager.AddToRoleAsync(adminUser, UserRole.USER);
         await userService.AddUser(adminUser.Id, adminUser.UserName, adminUser.FirstName, adminUser.LastName);
+    }
+
+    private static async Task MigrateDatabase(DbContext dbContext)
+    {
+        if (dbContext.Database.IsNpgsql())
+        {
+            await dbContext.Database.MigrateAsync();
+        }
     }
 }
