@@ -10,7 +10,7 @@ public class User : IAggregateRoot
     public string? LastName { get; set; }
     public decimal CurrentBalance { get; private set; }
 
-    private User()
+    public User()
     {
         // Used by EF Core migration.
     }

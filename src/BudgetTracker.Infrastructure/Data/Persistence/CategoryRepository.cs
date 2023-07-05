@@ -22,7 +22,10 @@ public class CategoryRepository : GenericRepository<Category>, ICategoryReposito
 
     public async Task<List<Category>> GetCategories(IEnumerable<string> categoryIds, string userId)
     {
-        return await dbSet.Where(x => x.UserId == userId && categoryIds.Contains(x.CategoryId)).ToListAsync();
+        var allCategories = await dbSet.Where(x => categoryIds.Contains(x.CategoryId)).ToListAsync();
+        var filteredCategories = allCategories.Where(x => x.IsDefaultCategory || x.UserId == userId);
+
+        return filteredCategories.ToList();
     }
 
     public async Task<List<Category>> GetDefaultCategories(IEnumerable<string> categoryIds)

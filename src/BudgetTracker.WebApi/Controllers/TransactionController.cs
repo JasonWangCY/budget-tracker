@@ -1,8 +1,10 @@
 ﻿using BudgetTracker.Application.Utils;
 using BudgetTracker.Domain.Entities.TransactionAggregate;
 using BudgetTracker.Domain.Exceptions;
+using BudgetTracker.Domain.Services;
 using BudgetTracker.Domain.Services.Interfaces;
 using BudgetTracker.Infrastructure.Identity;
+using BudgetTracker.WebApi.Services.Interfaces;
 using BudgetTracker.WebApi.TransferModels;
 using BudgetTracker.WebApi.Utils;
 using Microsoft.AspNetCore.Authorization;
@@ -20,19 +22,35 @@ public class TransactionController : ControllerBase
 {
     private readonly ITransactionService _transactionService;
     private readonly UserManager<ApplicationUser> _userManager;
+    private readonly IDtoConverter _dtoConverter;
 
     public TransactionController(
         ITransactionService transactionService,
-        UserManager<ApplicationUser> userManager)
+        UserManager<ApplicationUser> userManager,
+        IDtoConverter dtoConverter)
     {
         _transactionService = transactionService;
         _userManager = userManager;
+        _dtoConverter = dtoConverter;
+    }
+
+    [HttpGet]
+    [Route("listTransactionTypes")]
+    [AuthorizeRoles(UserRole.ADMIN, UserRole.USER)]
+    [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(List<TransactionTypeDto>))]
+    public async Task<IActionResult> ListTransactionTypes()
+    {
+        var userId = _userManager.GetUserId(User);
+        var transactionTypes = await _transactionService.ListTransactionTypes(userId);
+        var transactionTypesDto = _dtoConverter.ConvertToTransactionTypeDto(transactionTypes);
+
+        return Ok(transactionTypesDto);
     }
 
     [HttpGet]
     [Route("listTransactions")]
     [AuthorizeRoles(UserRole.ADMIN, UserRole.USER)]
-    [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(List<TransactionDto>))]
+    [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(IEnumerable<TransactionDto>))]
     public async Task<IActionResult> ListTransactions(string? startDate=null, string? endDate=null)
     {
         var isStartDateValid = DateTime.TryParseExact(startDate, "yyyyMMdd", CultureInfo.InvariantCulture,
@@ -49,15 +67,7 @@ public class TransactionController : ControllerBase
 
         var userId = _userManager.GetUserId(User);
         var transactions = await _transactionService.ListTransactions(startDateExact, endDateExact, userId);
-        var transactionDtos = transactions.Select(x => new TransactionDto
-        {
-            TransactionId = x.TransactionId,
-            TransactionDate = x.TransactionDate,
-            TransactionAmount = x.TransactionAmount,
-            Currency = x.Currency,
-            TransactionTypeName = x.TransactionType.TransactionTypeName,
-            CategoryName = x.Category.CategoryName
-        });
+        var transactionDtos = _dtoConverter.ConvertToTransactionDto(transactions);
 
         return Ok(transactionDtos);
     }
@@ -65,13 +75,13 @@ public class TransactionController : ControllerBase
     [HttpPost]
     [Route("addTransaction")]
     [AuthorizeRoles(UserRole.ADMIN, UserRole.USER)]
-    [ProducesResponseType(StatusCodes.Status200OK)]
-    public async Task<IActionResult> AddTransactions(List<AddTransactionRequest> requests)
+    [ProducesResponseType(StatusCodes.Status200OK)] 
+    public async Task<IActionResult> AddTransactions(IEnumerable<AddTransactionRequest> requests)
     {
         var userId = _userManager.GetUserId(User);
         var categoryIds = requests.DistinctBy(x => x.CategoryId).Select(x => x.CategoryId);
         var transactionTypeIds = requests.DistinctBy(x => x.TransactionTypeId).Select(x => x.TransactionTypeId);
-        var (categories, transactionTypes) = await _transactionService.GetCategoriesAndTransactionTypes(userId, transactionTypeIds, transactionTypeIds);
+        var (categories, transactionTypes) = await _transactionService.GetCategoriesAndTransactionTypes(userId, categoryIds, transactionTypeIds);
         var categoriesSet = categories.ToHashSet();
         var transactionTypesSet = transactionTypes.ToHashSet();
 
@@ -84,11 +94,11 @@ public class TransactionController : ControllerBase
             // TODO: We should not throw error here... return error response instead.
             if (category == null)
             {
-                throw new CategoryNotFoundException(request.CategoryName);
+                throw new CategoryNotFoundException(request.CategoryId);
             }
             if (transactionType == null)
             {
-                throw new TransactionTypeNotFoundException(request.TransactionTypeName);
+                throw new TransactionTypeNotFoundException(request.TransactionTypeId);
             }
 
             var transactionId = Guid.NewGuid().ToString();
@@ -101,5 +111,68 @@ public class TransactionController : ControllerBase
         return Ok(new GenericResponse { HasError = false });
     }
 
-    // TODO: Add transaction type, remove stuff
+    [HttpPost]
+    [Route("deleteTransaction")]
+    [AuthorizeRoles(UserRole.ADMIN, UserRole.USER)]
+    [ProducesResponseType(StatusCodes.Status200OK)]
+    public async Task<IActionResult> DeleteTransactions(IEnumerable<DeleteTransactionRequest> requests)
+    {
+        var userId = _userManager.GetUserId(User);
+        await _transactionService.DeleteTransactions(requests.Select(x => x.TransactionId), userId);
+
+        return Ok();
+    }
+
+    [HttpPost]
+    [Route("addTransactionTypes")]
+    [AuthorizeRoles(UserRole.ADMIN, UserRole.USER)]
+    [ProducesResponseType(StatusCodes.Status200OK)]
+    public async Task<IActionResult> AddTransactionTypes(IEnumerable<AddTransactionTypeRequest> requests)
+    {
+        var userId = _userManager.GetUserId(User);
+        const bool isDefaultType = false;
+
+        var transactionTypes = _dtoConverter.ConvertToTransactionTypeDomain(requests, isDefaultType, userId);
+        await _transactionService.AddTransactionTypes(transactionTypes);
+
+        return Ok();
+    }
+
+    [HttpPost]
+    [Route("deleteTransactionTypes")]
+    [AuthorizeRoles(UserRole.ADMIN, UserRole.USER)]
+    [ProducesResponseType(StatusCodes.Status200OK)]
+    public async Task<IActionResult> DeleteTransactionTypes(IEnumerable<DeleteTransactionTypeRequest> requests)
+    {
+        var userId = _userManager.GetUserId(User);
+        await _transactionService.DeleteTransactionTypes(requests.Select(x => x.TransactionTypeId), userId);
+
+        return Ok();
+    }
+
+    [HttpPost]
+    [Route("addDefaultTransactionTypes")]
+    [AuthorizeRoles(UserRole.ADMIN)]
+    [ProducesResponseType(StatusCodes.Status200OK)]
+    public async Task<IActionResult> AddDefaultTransactionTypes(List<AddTransactionTypeRequest> requests)
+    {
+        const bool isDefaultTransactionType = true;
+
+        var transactionTypes = _dtoConverter.ConvertToTransactionTypeDomain(requests, isDefaultTransactionType);
+        await _transactionService.AddTransactionTypes(transactionTypes);
+
+        return Ok();
+    }
+
+    [HttpPost]
+    [Route("deleteDefaultTransactionTypes")]
+    [AuthorizeRoles(UserRole.ADMIN)]
+    [ProducesResponseType(StatusCodes.Status200OK)]
+    public async Task<IActionResult> DeleteDefaultTransactionTypes(List<DeleteTransactionTypeRequest> requests)
+    {
+        var transactionTypes = _userManager.GetUserId(User);
+        await _transactionService.DeleteDefaultTransactionTypes(requests.Select(x => x.TransactionTypeId));
+
+        return Ok();
+    }
 }

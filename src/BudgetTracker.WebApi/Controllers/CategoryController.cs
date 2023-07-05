@@ -51,7 +51,7 @@ public class CategoryController : ControllerBase
     [HttpPost]
     [Route("addCategories")]
     [AuthorizeRoles(UserRole.ADMIN, UserRole.USER)]
-    [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(List<CategoryDto>))]
+    [ProducesResponseType(StatusCodes.Status200OK)]
     public async Task<IActionResult> AddCategories(List<AddCategoryRequest> requests)
     {
         var userId = _userManager.GetUserId(User);
@@ -66,7 +66,7 @@ public class CategoryController : ControllerBase
     [HttpPost]
     [Route("deleteCategories")]
     [AuthorizeRoles(UserRole.ADMIN, UserRole.USER)]
-    [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(List<CategoryDto>))]
+    [ProducesResponseType(StatusCodes.Status200OK)]
     public async Task<IActionResult> DeleteCategories(List<DeleteCategoryRequest> requests)
     {
         var userId = _userManager.GetUserId(User);
@@ -78,7 +78,7 @@ public class CategoryController : ControllerBase
     [HttpPost]
     [Route("addDefaultCategories")]
     [AuthorizeRoles(UserRole.ADMIN)]
-    [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(List<CategoryDto>))]
+    [ProducesResponseType(StatusCodes.Status200OK)]
     public async Task<IActionResult> AddDefaultCategories(List<AddCategoryRequest> requests)
     {
         const bool isDefaultCategory = true;
@@ -92,7 +92,7 @@ public class CategoryController : ControllerBase
     [HttpPost]
     [Route("deleteDefaultCategories")]
     [AuthorizeRoles(UserRole.ADMIN)]
-    [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(List<CategoryDto>))]
+    [ProducesResponseType(StatusCodes.Status200OK)]
     public async Task<IActionResult> DeleteDefaultCategories(List<DeleteCategoryRequest> requests)
     {
         var userId = _userManager.GetUserId(User);

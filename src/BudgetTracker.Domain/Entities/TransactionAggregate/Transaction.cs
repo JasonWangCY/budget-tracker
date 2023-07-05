@@ -11,11 +11,11 @@ public class Transaction : BaseEntity, IAggregateRoot
     public string? Description { get; private set; } = null!;
     public string TransactionTypeId { get; private set; } = null!;
     public string CategoryId { get; private set; } = null!;
-    public TransactionType TransactionType { get; private set; } = null!;
-    public Category Category { get; private set; } = null!;
+    public virtual TransactionType TransactionType { get; private set; } = null!;
+    public virtual Category Category { get; private set; } = null!;
     public string UserId { get; private set; } = null!;
 
-    private Transaction()
+    public Transaction()
     {
         // Used by EF Core migration.
     }

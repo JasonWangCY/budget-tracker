@@ -11,8 +11,8 @@ public class Budget : BaseEntity, IAggregateRoot
     public DateTime EndDate { get; private set; }
     public decimal SpendingLimit { get; private set; }
     public string? Description { get; private set; }
-    public List<BudgetCategory> BudgetCategories { get; private set; } = new();
-    public List<BudgetTransactionType> BudgetTransactionTypes { get; private set; } = new();
+    public virtual List<BudgetCategory> BudgetCategories { get; private set; } = new();
+    public virtual List<BudgetTransactionType> BudgetTransactionTypes { get; private set; } = new();
     public string UserId { get; private set; } = null!;
-    public User User { get; private set; } = null!;
+    public virtual User User { get; private set; } = null!;
 }

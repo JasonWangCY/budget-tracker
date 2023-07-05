@@ -43,7 +43,10 @@ public static class Dependencies
             options.UseNpgsql(conf.GetConnectionString("DbConnection")).UseSnakeCaseNamingConvention()
         );
         services.AddDbContext<BudgetTrackerDbContext>(options =>
-            options.UseNpgsql(conf.GetConnectionString("DbConnection")).UseSnakeCaseNamingConvention()
+            {
+                options.UseNpgsql(conf.GetConnectionString("DbConnection")).UseSnakeCaseNamingConvention();
+                options.UseLazyLoadingProxies();
+            }
         );
 
         // Identity

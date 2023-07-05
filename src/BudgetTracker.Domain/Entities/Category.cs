@@ -9,9 +9,9 @@ public class Category : IAggregateRoot
     public string? Description { get; private set; }
     public bool IsDefaultCategory { get; private set; } = false;
     public string? UserId { get; private set; } = null!;
-    public User? User { get; private set; } = null!;
+    public virtual User? User { get; private set; } = null!;
 
-    private Category()
+    public Category()
     {
         // Used by EF Core migration.
     }

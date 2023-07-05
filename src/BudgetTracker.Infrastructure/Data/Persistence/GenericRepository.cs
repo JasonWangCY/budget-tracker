@@ -26,4 +26,9 @@ public class GenericRepository<TClass> : IGenericRepository<TClass> where TClass
     {
         await dbSet.AddRangeAsync(entities);
     }
+
+    public virtual void RemoveRange(IEnumerable<TClass> entities)
+    {
+        dbSet.RemoveRange(entities);
+    }
 }

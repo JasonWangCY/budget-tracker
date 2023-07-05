@@ -18,6 +18,4 @@ public class AddTransactionRequest
     public string? Description { get; init; } = null!;
     public string TransactionTypeId { get; init; } = null!;
     public string CategoryId { get; init; } = null!;
-    public string CategoryName { get; set; } = null!;
-    public string TransactionTypeName { get; set; } = null!;
 }

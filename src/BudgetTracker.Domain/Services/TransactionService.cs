@@ -1,6 +1,5 @@
 ﻿using BudgetTracker.Domain.Entities;
 using BudgetTracker.Domain.Entities.TransactionAggregate;
-using BudgetTracker.Domain.Exceptions;
 using BudgetTracker.Domain.PersistenceInterfaces;
 using BudgetTracker.Domain.Services.Interfaces;
 
@@ -14,6 +13,11 @@ public class TransactionService : ITransactionService
         IUnitOfWork unitOfWork)
     {
         _unitOfWork = unitOfWork;
+    }
+
+    public async Task<List<TransactionType>> ListTransactionTypes(string userId)
+    {
+        return await _unitOfWork.Transactions.GetTransactionTypesIncludingDefaultAsync(userId);
     }
 
     public async Task<List<Transaction>> ListTransactions(
@@ -50,19 +54,43 @@ public class TransactionService : ITransactionService
         IEnumerable<string> categoryIds,
         IEnumerable<string> transactionTypeIds)
     {
-        var getCategoryTask = _unitOfWork.Categories.GetCategories(categoryIds, userId);
-        var getTransactionTypeTask = _unitOfWork.Transactions.GetTransactionTypes(transactionTypeIds, userId);
-        await Task.WhenAll(getCategoryTask, getTransactionTypeTask);
+        // Cannot use Task.WhenAll here since dbContext does not support simultaneous calls on one instance.
+        var categories = await _unitOfWork.Categories.GetCategories(categoryIds, userId);
+        var transactionTypes = await _unitOfWork.Transactions.GetTransactionTypes(transactionTypeIds, userId);
 
-        var categories = getCategoryTask.Result;
-        var transactionTypes = getTransactionTypeTask.Result;
         return (categories, transactionTypes);
     }
 
-    public async Task AddTransactions(List<Transaction> transactions)
+    public async Task AddTransactions(IEnumerable<Transaction> transactions)
     {
-        // TODO: Handle possible exceptions?
         await _unitOfWork.Transactions.AddRangeAsync(transactions);
+        await _unitOfWork.SaveChangesAsync();
+    }
+
+    public async Task DeleteTransactions(IEnumerable<string> transactionIds, string userId)
+    {
+        var transactionsToDelete = await _unitOfWork.Transactions.GetTransactions(transactionIds, userId);
+        _unitOfWork.Transactions.RemoveRange(transactionsToDelete);
+        await _unitOfWork.SaveChangesAsync();
+    }
+
+    public async Task AddTransactionTypes(IEnumerable<TransactionType> transactionTypes)
+    {
+        await _unitOfWork.Transactions.AddTransactionTypes(transactionTypes);
+        await _unitOfWork.SaveChangesAsync();
+    }
+
+    public async Task DeleteTransactionTypes(IEnumerable<string> transactionTypeIds, string userId)
+    {
+        var transactionTypesToDelete = await _unitOfWork.Transactions.GetTransactionTypes(transactionTypeIds, userId);
+        _unitOfWork.Transactions.DeleteTransactionTypes(transactionTypesToDelete);
+        await _unitOfWork.SaveChangesAsync();
+    }
+
+    public async Task DeleteDefaultTransactionTypes(IEnumerable<string> transactionTypeIds)
+    {
+        var transactionTypesToDelete = await _unitOfWork.Transactions.GetDefaultTransactionTypes(transactionTypeIds);
+        _unitOfWork.Transactions.DeleteTransactionTypes(transactionTypesToDelete);
         await _unitOfWork.SaveChangesAsync();
     }
 }

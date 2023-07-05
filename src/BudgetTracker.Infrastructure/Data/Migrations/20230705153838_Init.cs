@@ -75,7 +75,7 @@ namespace BudgetTracker.Infrastructure.Data.Migrations
                 {
                     transaction_type_id = table.Column<string>(type: "text", nullable: false),
                     transaction_type_name = table.Column<string>(type: "text", nullable: false),
-                    description = table.Column<string>(type: "text", nullable: false),
+                    description = table.Column<string>(type: "text", nullable: true),
                     sign = table.Column<int>(type: "integer", nullable: false),
                     is_default_type = table.Column<bool>(type: "boolean", nullable: false),
                     user_id = table.Column<string>(type: "text", nullable: true),

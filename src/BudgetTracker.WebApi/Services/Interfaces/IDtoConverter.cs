@@ -1,4 +1,5 @@
 ﻿using BudgetTracker.Domain.Entities;
+using BudgetTracker.Domain.Entities.TransactionAggregate;
 using BudgetTracker.WebApi.TransferModels;
 
 namespace BudgetTracker.WebApi.Services.Interfaces;
@@ -9,4 +10,13 @@ public interface IDtoConverter
         IEnumerable<AddCategoryRequest> requests,
         bool isDefaultCategory,
         string? userId=null);
+    IEnumerable<CategoryDto> ConvertToCategoryDto(IEnumerable<Category> categories);
+
+    IEnumerable<TransactionDto> ConvertToTransactionDto(IEnumerable<Transaction> transactions);
+    IEnumerable<TransactionType> ConvertToTransactionTypeDomain(
+        IEnumerable<AddTransactionTypeRequest> requests,
+        bool isDefaultType,
+        string? userId = null);
+    IEnumerable<TransactionTypeDto> ConvertToTransactionTypeDto(
+        IEnumerable<TransactionType> transactionTypes);
 }
