@@ -27,20 +27,19 @@ sample project from the Microsoft team.
 To run the app locally, follow these steps 
 after cloning the project:
 
-1. Start the local PostgreSQL server.
+1. In the root folder, run 
 ```bash
-docker-compose -f docker-compose.yml up -d
+docker compose -f .\docker-compose-dev.yml up -d
 ```
 
-2. Run the Web Api
-- will provide DockerFile later
-
-3. To check the database, visit localhost:8080
+2. To check the database, visit http://localhost:8080
+```
 - System: PostgreSQL
 - Server: db
 - Username: test_user
 - Password: 1234
 - Database: budget_dev
+```
 
-4. To view the swagger page for the API,
-visit https://localhost:7073/ 
+3. The API is hosted at http://localhost:7073/.
+A swagger page is available at http://localhost:7073/swagger/
