@@ -5,6 +5,8 @@ namespace BudgetTracker.Domain.Services.Interfaces;
 
 public interface ITransactionService
 {
+    Task<List<Transaction>> GetTransactions(IEnumerable<string> transactionIds, string userId);
+    Task<List<TransactionType>> GetTransactionTypes(IEnumerable<string> transactionTypeIds, string userId);
     Task<List<TransactionType>> ListTransactionTypes(string userId);
     Task<List<Transaction>> ListTransactions(DateTime? startDate, DateTime? endDate, string userId);
     Task<(List<Category>, List<TransactionType>)> GetCategoriesAndTransactionTypes(

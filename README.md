@@ -40,7 +40,7 @@ docker-compose -f docker-compose.yml up -d
 - Server: db
 - Username: test_user
 - Password: 1234
-- Database: bduget_dev
+- Database: budget_dev
 
 4. To view the swagger page for the API,
 visit https://localhost:7073/ 

@@ -29,4 +29,12 @@ public class Category : IAggregateRoot
         IsDefaultCategory = isDefaultCategory;
         UserId = userId;
     }
+
+    public void UpdateCategory(
+        string categoryName,
+        string? description)
+    {
+        CategoryName = categoryName;
+        Description = description;
+    }
 }

@@ -1,4 +1,5 @@
-﻿using BudgetTracker.Domain.Services.Interfaces;
+﻿using BudgetTracker.Domain.PersistenceInterfaces;
+using BudgetTracker.Domain.Services.Interfaces;
 using BudgetTracker.Infrastructure.Identity;
 using BudgetTracker.WebApi.Services.Interfaces;
 using BudgetTracker.WebApi.TransferModels;
@@ -18,15 +19,18 @@ public class CategoryController : ControllerBase
     private readonly UserManager<ApplicationUser> _userManager;
     private readonly ICategoryService _categoryService;
     private readonly IDtoConverter _dtoConverter;
+    private readonly IUnitOfWork _unitOfWork;
 
     public CategoryController(
         UserManager<ApplicationUser> userManager,
         ICategoryService categoryService,
-        IDtoConverter dtoConverter)
+        IDtoConverter dtoConverter,
+        IUnitOfWork unitOfWork)
     {
         _userManager = userManager;
         _categoryService = categoryService;
         _dtoConverter = dtoConverter;
+        _unitOfWork = unitOfWork;
     }
 
     [HttpGet]
@@ -59,6 +63,23 @@ public class CategoryController : ControllerBase
 
         var categories = _dtoConverter.ConvertToCategoryDomain(requests, isDefaultCategory, userId);
         await _categoryService.AddCategories(categories);
+
+        return Ok();
+    }
+
+    // TODO: We need concurrency control to prevent race condition here.
+    // Let's use optimistic concurrency with versioning in Postgres
+    [HttpPost]
+    [Route("updateCategories")]
+    [AuthorizeRoles(UserRole.ADMIN, UserRole.USER)]
+    [ProducesResponseType(StatusCodes.Status200OK)]
+    public async Task<IActionResult> UpdateCategories(List<UpdateCategoryRequest> requests)
+    {
+        var userId = _userManager.GetUserId(User);
+
+        var categories = await _categoryService.GetCategories(requests.Select(x => x.CategoryId), userId);
+        _dtoConverter.UpdateCategoriesDomain(requests, categories);
+        await _unitOfWork.SaveChangesAsync();
 
         return Ok();
     }

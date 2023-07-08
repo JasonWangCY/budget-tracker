@@ -33,4 +33,11 @@ public static class TransactionConstants
         public const string EXPENSE = "EXPENSE";
         public const string INCOME = "INCOME";
     }
+
+    public static class TransactionStatus
+    {
+        public const string Gain = "Gain";
+        public const string Loss = "Loss";
+        public const string NoChange = "NoChange";
+    }
 }

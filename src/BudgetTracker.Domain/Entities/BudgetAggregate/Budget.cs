@@ -1,5 +1,4 @@
-﻿using BudgetTracker.Domain.Entities.TransactionAggregate;
-using BudgetTracker.Domain.PersistenceInterfaces;
+﻿using BudgetTracker.Domain.PersistenceInterfaces;
 
 namespace BudgetTracker.Domain.Entities.BudgetAggregate;
 

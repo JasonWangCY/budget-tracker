@@ -1,6 +1,4 @@
-﻿using System.Text.Json;
-
-namespace BudgetTracker.WebApi.TransferModels;
+﻿namespace BudgetTracker.WebApi.TransferModels;
 
 public class ErrorResponse
 {

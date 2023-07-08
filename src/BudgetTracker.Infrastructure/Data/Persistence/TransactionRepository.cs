@@ -1,8 +1,6 @@
-﻿using BudgetTracker.Domain.Entities;
-using BudgetTracker.Domain.Entities.TransactionAggregate;
+﻿using BudgetTracker.Domain.Entities.TransactionAggregate;
 using BudgetTracker.Domain.PersistenceInterfaces.Repositories;
 using Microsoft.EntityFrameworkCore;
-using System.Collections.Generic;
 
 namespace BudgetTracker.Infrastructure.Data.Persistence;
 
@@ -23,6 +21,11 @@ public class TransactionRepository : GenericRepository<Transaction>, ITransactio
     public async Task<List<Transaction>> GetTransactions(IEnumerable<string> transactionIds, string userId)
     {
         return await dbSet.Where(x => x.UserId == userId && transactionIds.Contains(x.TransactionId)).ToListAsync();
+    }
+
+    public async Task<List<TransactionType>> GetTransactionTypes(IEnumerable<string> transactionTypeIds, string userId)
+    {
+        return await _dbContext.TransactionTypes.Where(x => x.UserId == userId && transactionTypeIds.Contains(x.TransactionTypeId)).ToListAsync();
     }
 
     public async Task<List<Transaction>> GetTransactionsWithinDateRangeAsync(DateTime startDate, DateTime endDate, string userId)
@@ -58,7 +61,7 @@ public class TransactionRepository : GenericRepository<Transaction>, ITransactio
             x.TransactionTypeId== typeId);
     }
 
-    public async Task<List<TransactionType>> GetTransactionTypes(IEnumerable<string> typeIds, string userId)
+    public async Task<List<TransactionType>> GetTransactionTypesInclDefault(IEnumerable<string> typeIds, string userId)
     {
         var allTransactionTypes = await _dbContext.TransactionTypes
             .Where(x => typeIds.Contains(x.TransactionTypeId)).ToListAsync();

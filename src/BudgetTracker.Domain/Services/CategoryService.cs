@@ -13,6 +13,11 @@ public class CategoryService : ICategoryService
         _unitOfWork = unitOfWork;
     }
 
+    public async Task<List<Category>> GetCategories(IEnumerable<string> categoryIds, string userId)
+    {
+        return await _unitOfWork.Categories.GetCategories(categoryIds, userId);
+    }
+
     public async Task<List<Category>> ListCategories(string userId)
     {
         return await _unitOfWork.Categories.GetCategoriesIncludingDefaultAsync(userId);
@@ -26,7 +31,7 @@ public class CategoryService : ICategoryService
 
     public async Task DeleteCategories(IEnumerable<string> categoryIds, string userId)
     {
-        var categoriesToDelete = await _unitOfWork.Categories.GetCategories(categoryIds, userId);
+        var categoriesToDelete = await GetCategories(categoryIds, userId);
         _unitOfWork.Categories.DeleteRange(categoriesToDelete);
         await _unitOfWork.SaveChangesAsync();
     }

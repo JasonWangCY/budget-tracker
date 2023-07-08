@@ -1,7 +1,7 @@
 ﻿using BudgetTracker.Application.Utils;
 using BudgetTracker.Domain.Entities.TransactionAggregate;
 using BudgetTracker.Domain.Exceptions;
-using BudgetTracker.Domain.Services;
+using BudgetTracker.Domain.PersistenceInterfaces;
 using BudgetTracker.Domain.Services.Interfaces;
 using BudgetTracker.Infrastructure.Identity;
 using BudgetTracker.WebApi.Services.Interfaces;
@@ -23,15 +23,18 @@ public class TransactionController : ControllerBase
     private readonly ITransactionService _transactionService;
     private readonly UserManager<ApplicationUser> _userManager;
     private readonly IDtoConverter _dtoConverter;
+    private readonly IUnitOfWork _unitOfWork;
 
     public TransactionController(
         ITransactionService transactionService,
         UserManager<ApplicationUser> userManager,
-        IDtoConverter dtoConverter)
+        IDtoConverter dtoConverter,
+        IUnitOfWork unitOfWork)
     {
         _transactionService = transactionService;
         _userManager = userManager;
         _dtoConverter = dtoConverter;
+        _unitOfWork = unitOfWork;
     }
 
     [HttpGet]
@@ -112,6 +115,21 @@ public class TransactionController : ControllerBase
     }
 
     [HttpPost]
+    [Route("updateTransactions")]
+    [AuthorizeRoles(UserRole.ADMIN, UserRole.USER)]
+    [ProducesResponseType(StatusCodes.Status200OK)]
+    public async Task<IActionResult> UpdateTransactions(List<UpdateTransactionRequest> requests)
+    {
+        var userId = _userManager.GetUserId(User);
+        var transactions = await _transactionService.GetTransactions(requests.Select(x => x.TransactionId), userId);
+
+        _dtoConverter.UpdateTransactionsDomain(requests, transactions);
+        await _unitOfWork.SaveChangesAsync();
+
+        return Ok();
+    }
+
+    [HttpPost]
     [Route("deleteTransaction")]
     [AuthorizeRoles(UserRole.ADMIN, UserRole.USER)]
     [ProducesResponseType(StatusCodes.Status200OK)]
@@ -134,6 +152,21 @@ public class TransactionController : ControllerBase
 
         var transactionTypes = _dtoConverter.ConvertToTransactionTypeDomain(requests, isDefaultType, userId);
         await _transactionService.AddTransactionTypes(transactionTypes);
+
+        return Ok();
+    }
+
+    [HttpPost]
+    [Route("updateTransactionTypes")]
+    [AuthorizeRoles(UserRole.ADMIN, UserRole.USER)]
+    [ProducesResponseType(StatusCodes.Status200OK)]
+    public async Task<IActionResult> UpdateTransactionTypes(List<UpdateTransactionTypeRequest> requests)
+    {
+        var userId = _userManager.GetUserId(User);
+        var transactionTypes = await _transactionService.GetTransactionTypes(requests.Select(x => x.TransactionTypeId), userId);
+
+        _dtoConverter.UpdateTransactionTypesDomain(requests, transactionTypes);
+        await _unitOfWork.SaveChangesAsync();
 
         return Ok();
     }

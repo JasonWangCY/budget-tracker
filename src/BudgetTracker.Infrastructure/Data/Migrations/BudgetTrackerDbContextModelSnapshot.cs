@@ -157,6 +157,7 @@ namespace BudgetTracker.Infrastructure.Data.Migrations
                         .HasColumnName("created_at");
 
                     b.Property<string>("Currency")
+                        .IsRequired()
                         .HasColumnType("text")
                         .HasColumnName("currency");
 
@@ -175,6 +176,11 @@ namespace BudgetTracker.Infrastructure.Data.Migrations
                     b.Property<DateTime>("TransactionDate")
                         .HasColumnType("timestamp with time zone")
                         .HasColumnName("transaction_date");
+
+                    b.Property<string>("TransactionStatus")
+                        .IsRequired()
+                        .HasColumnType("text")
+                        .HasColumnName("transaction_status");
 
                     b.Property<string>("TransactionTypeId")
                         .IsRequired()
@@ -222,10 +228,6 @@ namespace BudgetTracker.Infrastructure.Data.Migrations
                     b.Property<DateTime>("LastModifiedTime")
                         .HasColumnType("timestamp with time zone")
                         .HasColumnName("last_modified_time");
-
-                    b.Property<int>("Sign")
-                        .HasColumnType("integer")
-                        .HasColumnName("sign");
 
                     b.Property<string>("TransactionTypeName")
                         .IsRequired()

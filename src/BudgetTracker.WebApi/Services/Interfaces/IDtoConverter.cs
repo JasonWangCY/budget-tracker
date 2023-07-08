@@ -19,4 +19,13 @@ public interface IDtoConverter
         string? userId = null);
     IEnumerable<TransactionTypeDto> ConvertToTransactionTypeDto(
         IEnumerable<TransactionType> transactionTypes);
+    void UpdateCategoriesDomain(
+        IEnumerable<UpdateCategoryRequest> categoryDtos,
+        IEnumerable<Category> categories);
+    void UpdateTransactionsDomain(
+        IEnumerable<UpdateTransactionRequest> transactionDtos,
+        IEnumerable<Transaction> transactions);
+    void UpdateTransactionTypesDomain(
+        IEnumerable<UpdateTransactionTypeRequest> transactionTypeDtos,
+        IEnumerable<TransactionType> transactionTypes);
 }

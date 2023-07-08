@@ -15,6 +15,16 @@ public class TransactionService : ITransactionService
         _unitOfWork = unitOfWork;
     }
 
+    public async Task<List<Transaction>> GetTransactions(IEnumerable<string> transactionIds, string userId)
+    {
+        return await _unitOfWork.Transactions.GetTransactions(transactionIds, userId);
+    }
+
+    public async Task<List<TransactionType>> GetTransactionTypes(IEnumerable<string> transactionTypeIds, string userId)
+    {
+        return await _unitOfWork.Transactions.GetTransactionTypes(transactionTypeIds, userId);
+    }
+
     public async Task<List<TransactionType>> ListTransactionTypes(string userId)
     {
         return await _unitOfWork.Transactions.GetTransactionTypesIncludingDefaultAsync(userId);
@@ -56,7 +66,7 @@ public class TransactionService : ITransactionService
     {
         // Cannot use Task.WhenAll here since dbContext does not support simultaneous calls on one instance.
         var categories = await _unitOfWork.Categories.GetCategories(categoryIds, userId);
-        var transactionTypes = await _unitOfWork.Transactions.GetTransactionTypes(transactionTypeIds, userId);
+        var transactionTypes = await _unitOfWork.Transactions.GetTransactionTypesInclDefault(transactionTypeIds, userId);
 
         return (categories, transactionTypes);
     }
@@ -69,7 +79,7 @@ public class TransactionService : ITransactionService
 
     public async Task DeleteTransactions(IEnumerable<string> transactionIds, string userId)
     {
-        var transactionsToDelete = await _unitOfWork.Transactions.GetTransactions(transactionIds, userId);
+        var transactionsToDelete = await GetTransactions(transactionIds, userId);
         _unitOfWork.Transactions.RemoveRange(transactionsToDelete);
         await _unitOfWork.SaveChangesAsync();
     }
@@ -82,7 +92,7 @@ public class TransactionService : ITransactionService
 
     public async Task DeleteTransactionTypes(IEnumerable<string> transactionTypeIds, string userId)
     {
-        var transactionTypesToDelete = await _unitOfWork.Transactions.GetTransactionTypes(transactionTypeIds, userId);
+        var transactionTypesToDelete = await _unitOfWork.Transactions.GetTransactionTypesInclDefault(transactionTypeIds, userId);
         _unitOfWork.Transactions.DeleteTransactionTypes(transactionTypesToDelete);
         await _unitOfWork.SaveChangesAsync();
     }
