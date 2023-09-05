@@ -33,6 +33,7 @@
         "@typescript-eslint/promise-function-async": "warn",
         "@typescript-eslint/no-misused-promises": "warn",
         "@typescript-eslint/triple-slash-reference": "off",
+        "@typescript-eslint/consistent-type-imports": "warn",
         "prettier/prettier": "warn"
     }
 }

@@ -6,7 +6,7 @@ export const Navbar = () => {
 
   return (
     <AppBar>
-      <p>Nav bar</p>
+      <p>Budget Tracker</p>
     </AppBar>
   );
 };

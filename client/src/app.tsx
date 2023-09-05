@@ -1,7 +1,7 @@
 import { Routes, Route } from "react-router-dom";
 import { Container } from "@mui/material";
 import { Navbar } from "./app/navbar";
-import { Auth } from "./features/auth/auth";
+import Auth from "./features/auth/auth";
 
 function App() {
   return (
