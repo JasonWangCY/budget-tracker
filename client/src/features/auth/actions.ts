@@ -18,7 +18,7 @@ export const signIn = (formData: UserInfo) => {
     try {
       console.log("trying to sign in...");
       // TODO: Set up CORS request
-      // const { data } = await api.signIn(formData);
+      const { data } = await api.signIn(formData);
       const action: AuthAction = {
         type: actionType.AUTH,
         userInfo: formData,
@@ -37,7 +37,7 @@ export const signUp = (formData: UserInfo) => {
   return async (dispatch: AuthDispatchType) => {
     try {
       console.log("trying to sign up...");
-      // const { data } = await api.signUp(formData);
+      const { data } = await api.signUp(formData);
       const action: AuthAction = {
         type: actionType.AUTH,
         userInfo: formData,
@@ -47,4 +47,5 @@ export const signUp = (formData: UserInfo) => {
     } catch (error) {
       console.log(error);
     }
-  }};
+  };
+};

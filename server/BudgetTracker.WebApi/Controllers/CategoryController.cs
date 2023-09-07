@@ -11,6 +11,7 @@ using static BudgetTracker.Application.Constants.Constants;
 
 namespace BudgetTracker.WebApi.Controllers;
 
+// TODO: Follow REST API conventions (get rid of verbs and keep nouns)
 [Authorize]
 [ApiController]
 [Route("api/[controller]")]

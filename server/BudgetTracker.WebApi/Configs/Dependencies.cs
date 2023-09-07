@@ -36,15 +36,16 @@ public static class Dependencies
         return services;
     }
 
-    public static IServiceCollection RegisterDatabase(this IServiceCollection services, IConfiguration conf)
+    public static IServiceCollection RegisterDatabase(this IServiceCollection services)
     {
         // Entity Framework
+        var dbConnection = EnvironmentManager.GetDatabaseConnection();
         services.AddDbContext<ApplicationDbContext>(options =>
-            options.UseNpgsql(conf.GetConnectionString("DbConnection")).UseSnakeCaseNamingConvention()
+            options.UseNpgsql(dbConnection).UseSnakeCaseNamingConvention()
         );
         services.AddDbContext<BudgetTrackerDbContext>(options =>
             {
-                options.UseNpgsql(conf.GetConnectionString("DbConnection")).UseSnakeCaseNamingConvention();
+                options.UseNpgsql(dbConnection).UseSnakeCaseNamingConvention();
                 options.UseLazyLoadingProxies();
             }
         );
@@ -74,7 +75,7 @@ public static class Dependencies
         services.AddScoped<IGenericRepository<Budget>, GenericRepository<Budget>>()
             .AddScoped<IGenericRepository<Category>, GenericRepository<Category>>()
             .AddScoped<IGenericRepository<Transaction>, GenericRepository<Transaction>>()
-            .AddScoped<IGenericRepository<Domain.Entities.User>, GenericRepository<Domain.Entities.User>>();
+            .AddScoped<IGenericRepository<User>, GenericRepository<User>>();
 
         return services;
     }
@@ -114,6 +115,14 @@ public static class Dependencies
 
     public static IServiceCollection ConfigApi(this IServiceCollection services)
     {
+        var corsOrigins = EnvironmentManager.GetCorsOrigins();
+        services.AddCors(options =>
+        {
+            options.AddDefaultPolicy(policy =>
+            {
+                policy.WithOrigins(corsOrigins).AllowAnyMethod().AllowAnyHeader();
+            });
+        });
         services.AddControllers();
         services.AddEndpointsApiExplorer();
         services.AddSwaggerGen(c =>

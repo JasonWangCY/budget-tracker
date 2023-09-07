@@ -47,9 +47,9 @@ const Auth = () => {
     e.preventDefault();
 
     if (isSignUp) {
-      dispatch(signIn(form));
-    } else {
       dispatch(signUp(form));
+    } else {
+      dispatch(signIn(form));
     }
   };
 

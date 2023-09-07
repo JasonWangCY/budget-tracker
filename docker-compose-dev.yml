@@ -3,7 +3,7 @@ services:
     image: budget-tracker-api
     build:
       context: ./server
-      dockerfile: ./server/BudgetTracker.WebApi/Dockerfile
+      dockerfile: ./BudgetTracker.WebApi/Dockerfile
     env_file: api-dev.env
     ports:
       - 7073:80

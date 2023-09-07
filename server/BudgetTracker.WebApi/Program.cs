@@ -17,8 +17,8 @@ if (app.Environment.IsDevelopment())
     app.UseSwaggerUI();
 }
 
-app.UseHttpsRedirection();
 app.UseMiddleware<ExceptionMiddleware>();
+app.UseCors();
 
 app.UseAuthentication();
 app.UseAuthorization();
@@ -33,7 +33,7 @@ WebApplicationBuilder ConfigureBuilder()
     var conf = builder.Configuration;
 
     builder.Services.RegisterServices()
-        .RegisterDatabase(conf)
+        .RegisterDatabase()
         .RegisterAuth(conf)
         .ConfigApi();
 
