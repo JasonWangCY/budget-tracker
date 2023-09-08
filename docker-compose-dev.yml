@@ -6,7 +6,7 @@ services:
       dockerfile: ./BudgetTracker.WebApi/Dockerfile
     env_file: api-dev.env
     ports:
-      - 7073:80
+      - 8073:80
     depends_on:
       - db
   db:

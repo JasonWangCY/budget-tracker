@@ -1,6 +1,7 @@
 import * as actionType from "./constants";
 import * as api from "../../api/index";
 import { type UserInfo } from "./auth";
+import { type NavigateFunction } from "react-router-dom";
 
 export interface AuthState {
   userInfo: UserInfo;
@@ -13,7 +14,7 @@ export interface AuthAction {
 
 export type AuthDispatchType = (args: AuthAction) => AuthAction;
 
-export const signIn = (formData: UserInfo) => {
+export const signIn = (formData: UserInfo, navigate: NavigateFunction) => {
   return async (dispatch: AuthDispatchType) => {
     try {
       console.log("trying to sign in...");
@@ -26,14 +27,14 @@ export const signIn = (formData: UserInfo) => {
 
       dispatch(action);
 
-      // router.push('/');
+      navigate("/home");
     } catch (error) {
       console.log(error);
     }
   };
 };
 
-export const signUp = (formData: UserInfo) => {
+export const signUp = (formData: UserInfo, navigate: NavigateFunction) => {
   return async (dispatch: AuthDispatchType) => {
     try {
       console.log("trying to sign up...");
@@ -44,6 +45,8 @@ export const signUp = (formData: UserInfo) => {
       };
 
       dispatch(action);
+
+      navigate("/home");
     } catch (error) {
       console.log(error);
     }

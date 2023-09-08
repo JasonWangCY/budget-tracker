@@ -1,7 +1,7 @@
 import axios from "axios";
 import { type UserInfo } from "../features/auth/auth";
 
-const URL = "http://localhost:7073/api/";
+const URL = "http://localhost:8073/api/";
 const API = axios.create({ baseURL: URL });
 
 export const signIn = async (formData: UserInfo) =>

@@ -20,6 +20,7 @@ const authReducer = (
   switch (action.type) {
     case actionType.AUTH:
       console.log("AUTH");
+      // TODO: Use react context to store user login status instead of in local storage.
       localStorage.setItem("profile", JSON.stringify({ ...action?.userInfo }));
 
       return { ...state, userInfo: action.userInfo };

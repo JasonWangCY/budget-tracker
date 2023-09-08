@@ -10,6 +10,7 @@ import {
 } from "@mui/material";
 import { Visibility, VisibilityOff } from "@mui/icons-material";
 import { type Dispatch } from "redux";
+import { useNavigate } from "react-router-dom";
 
 export interface UserInfo {
   firstName: string;
@@ -32,6 +33,12 @@ const Auth = () => {
   const [form, setForm] = useState<UserInfo>(initialState);
   const [isSignUp, setIsSignUp] = useState<boolean>(false);
   const dispatch: Dispatch<any> = useAppDispatch();
+  const navigate = useNavigate();
+  // TODO: Need to move away from storing JWT in local storage.
+  // https://dev.to/rdegges/please-stop-using-local-storage-1i04
+  const [isLoggedIn, setIsLoggedIn] = useState(
+    localStorage.getItem("profile") ?? false,
+  );
 
   const [showPassword, setShowPassword] = useState(false);
   const handleShowPassword = () => {
@@ -47,9 +54,9 @@ const Auth = () => {
     e.preventDefault();
 
     if (isSignUp) {
-      dispatch(signUp(form));
+      dispatch(signUp(form, navigate));
     } else {
-      dispatch(signIn(form));
+      dispatch(signIn(form, navigate));
     }
   };
 
