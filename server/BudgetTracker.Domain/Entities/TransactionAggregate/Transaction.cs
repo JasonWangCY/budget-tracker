@@ -60,7 +60,7 @@ public class Transaction : BaseEntity, IAggregateRoot
         TransactionStatus = GetTransactionStatus(transactionAmount);
     }
 
-    private string GetTransactionStatus(decimal transactionAmount)
+    private static string GetTransactionStatus(decimal transactionAmount)
     {
         if (transactionAmount > 0) return TransactionConstants.TransactionStatus.Gain;
         if (transactionAmount < 0) return TransactionConstants.TransactionStatus.Loss;

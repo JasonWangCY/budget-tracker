@@ -12,7 +12,6 @@ public class ApplicationDbContextSeed
     public static async Task SeedAsync(
         ApplicationDbContext applicationDbContext,
         BudgetTrackerDbContext budgetTrackerDbContext,
-        UserManager<ApplicationUser> userManager,
         RoleManager<IdentityRole> roleManager,
         IUserService userService)
     {
@@ -31,9 +30,6 @@ public class ApplicationDbContextSeed
             FirstName = AuthorizationConstants.DEFAULT_USER_NAME,
             Email = AuthorizationConstants.DEFAULT_USER_EMAIL
         };
-        //await userManager.CreateAsync(defaultUser, AuthorizationConstants.DEFAULT_USER_PASSWORD);
-        //defaultUser = await userManager.FindByNameAsync(AuthorizationConstants.DEFAULT_USER_NAME);
-        //await userManager.AddToRoleAsync(defaultUser, UserRole.USER);
         var userRoles = new List<string> { UserRole.USER };
         await userService.AddUser(defaultUser, AuthorizationConstants.DEFAULT_USER_PASSWORD, userRoles);
 
@@ -44,10 +40,6 @@ public class ApplicationDbContextSeed
             FirstName = AuthorizationConstants.DEFAULT_ADMIN_NAME,
             Email = AuthorizationConstants.DEFAULT_ADMIN_EMAIL
         };
-        //await userManager.CreateAsync(adminUser, AuthorizationConstants.DEFAULT_ADMIN_PASSWORD);
-        //adminUser = await userManager.FindByNameAsync(AuthorizationConstants.DEFAULT_ADMIN_NAME);
-        //await userManager.AddToRoleAsync(adminUser, UserRole.ADMIN);
-        //await userManager.AddToRoleAsync(adminUser, UserRole.USER);
         var adminUserRoles = new List<string> { UserRole.ADMIN, UserRole.USER };
         await userService.AddUser(adminUser, AuthorizationConstants.DEFAULT_ADMIN_PASSWORD, adminUserRoles);
     }

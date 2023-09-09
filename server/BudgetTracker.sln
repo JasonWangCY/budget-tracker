@@ -11,6 +11,8 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "BudgetTracker.Application",
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "BudgetTracker.Domain", "BudgetTracker.Domain\BudgetTracker.Domain.csproj", "{43A07D63-BDCD-4616-9EA8-830BD69E177F}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BudgetTracker.Tests", "BudgetTracker.Tests\BudgetTracker.Tests.csproj", "{DCF190CE-3450-454D-945C-DF1284B3C19C}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -33,6 +35,10 @@ Global
 		{43A07D63-BDCD-4616-9EA8-830BD69E177F}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{43A07D63-BDCD-4616-9EA8-830BD69E177F}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{43A07D63-BDCD-4616-9EA8-830BD69E177F}.Release|Any CPU.Build.0 = Release|Any CPU
+		{DCF190CE-3450-454D-945C-DF1284B3C19C}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{DCF190CE-3450-454D-945C-DF1284B3C19C}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{DCF190CE-3450-454D-945C-DF1284B3C19C}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{DCF190CE-3450-454D-945C-DF1284B3C19C}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
