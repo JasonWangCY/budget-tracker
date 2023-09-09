@@ -1,5 +1,6 @@
 using BudgetTracker.Application.Services.Interfaces;
 using BudgetTracker.Infrastructure.Identity;
+using BudgetTracker.WebApi.Configs.Models;
 using BudgetTracker.WebApi.TransferModels;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
@@ -13,19 +14,18 @@ namespace BudgetTracker.WebApi.Controllers;
 [Route("api/[controller]")]
 public class AuthController : ControllerBase
 {
-    // TODO: Remove IConfiguration to use IOption instead.
     private readonly UserManager<ApplicationUser> _userManager;
-    private readonly IConfiguration _configuration;
     private readonly ITokenClaimService _tokenClaimService;
+    private readonly JwtOptions _jwtOptions;
 
     public AuthController(
         UserManager<ApplicationUser> userManager,
-        IConfiguration configuration,
-        ITokenClaimService tokenClaimService)
+        ITokenClaimService tokenClaimService,
+        JwtOptions jwtOptions)
     {
         _userManager = userManager;
-        _configuration = configuration;
         _tokenClaimService = tokenClaimService;
+        _jwtOptions = jwtOptions;
     }
 
     [HttpPost]
@@ -43,8 +43,8 @@ public class AuthController : ControllerBase
 
         var userRoles = await _userManager.GetRolesAsync(user);
 
-        var issuer = _configuration["JWT:ValidIssuer"];
-        var audience = _configuration["JWT:ValidAudience"];
+        var issuer = _jwtOptions.ValidIssuer;
+        var audience = _jwtOptions.ValidAudience;
         var token = _tokenClaimService.GetToken(user.UserName, user.Id, userRoles, issuer, audience);
 
         return Ok(new AuthResponse

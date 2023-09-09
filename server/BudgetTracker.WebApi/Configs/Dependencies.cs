@@ -11,6 +11,7 @@ using BudgetTracker.Infrastructure.Data;
 using BudgetTracker.Infrastructure.Data.Persistence;
 using BudgetTracker.Infrastructure.Identity;
 using BudgetTracker.Infrastructure.Identity.Interfaces;
+using BudgetTracker.WebApi.Configs.Models;
 using BudgetTracker.WebApi.Services;
 using BudgetTracker.WebApi.Services.Interfaces;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
@@ -84,7 +85,11 @@ public static class Dependencies
 
     public static IServiceCollection RegisterAuth(this IServiceCollection services, IConfiguration conf)
     {
-        services.AddScoped<ITokenClaimService, IdentityTokenClaimService>();
+        var jwtOptions = new JwtOptions();
+        conf.GetSection(nameof(JwtOptions)).Bind(jwtOptions);
+
+        services.AddScoped<ITokenClaimService, IdentityTokenClaimService>()
+            .AddSingleton(jwtOptions);
 
         services.AddAuthentication(options =>
         {
@@ -106,9 +111,9 @@ public static class Dependencies
                 ValidateAudience = true,
                 ValidateLifetime = true,
                 ValidateIssuerSigningKey = true,
-                ValidAudience = conf["JWT:ValidAudience"],
-                ValidIssuer = conf["JWT:ValidIssuer"],
-                IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(conf["JWT:Secret"])),
+                ValidAudience = jwtOptions.ValidAudience,
+                ValidIssuer = jwtOptions.ValidIssuer,
+                IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(jwtOptions.Secret)),
             };
         });
 
