@@ -14,8 +14,11 @@ public class IdentityTokenClaimService : ITokenClaimService
         var secretKey = Encoding.ASCII.GetBytes(AuthorizationConstants.JWT_SECRET_KEY);
         var authSigningKey = new SymmetricSecurityKey(secretKey);
 
-        var claims = new List<Claim> { new Claim(ClaimTypes.Name, userName) };
-        claims.Add(new Claim(ClaimTypes.NameIdentifier, userId));
+        var claims = new List<Claim>
+        {
+            new Claim(ClaimTypes.Name, userName),
+            new Claim(ClaimTypes.NameIdentifier, userId)
+        };
         claims.AddRange(userRoles.Select(role => new Claim(ClaimTypes.Role, role)));
 
         var tokenDescriptor = new SecurityTokenDescriptor

@@ -10,6 +10,7 @@ using BudgetTracker.Domain.Services.Interfaces;
 using BudgetTracker.Infrastructure.Data;
 using BudgetTracker.Infrastructure.Data.Persistence;
 using BudgetTracker.Infrastructure.Identity;
+using BudgetTracker.Infrastructure.Identity.Interfaces;
 using BudgetTracker.WebApi.Services;
 using BudgetTracker.WebApi.Services.Interfaces;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
@@ -67,6 +68,7 @@ public static class Dependencies
 
         // Unit of work + repository pattern
         services.AddScoped<IUnitOfWork, UnitOfWork>()
+            .AddScoped<IDatabaseTransaction, BudgetTrackerDatabaseTransaction>()
             .AddScoped<IBudgetRepository, BudgetRepository>()
             .AddScoped<ICategoryRepository, CategoryRepository>()
             .AddScoped<ITransactionRepository, TransactionRepository>()

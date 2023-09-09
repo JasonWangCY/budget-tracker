@@ -25,9 +25,19 @@ public class UnitOfWork : IUnitOfWork
         Categories = categories;
     }
 
+    public IDatabaseTransaction BeginTransaction()
+    {
+        return new BudgetTrackerDatabaseTransaction(_dbContext);
+    }
+
     public async Task<int> SaveChangesAsync()
     {
         var numberOfStatesWritten = await _dbContext.SaveChangesAsync();
         return numberOfStatesWritten;
+    }
+
+    public void Dispose()
+    {
+        _dbContext.Dispose();
     }
 }

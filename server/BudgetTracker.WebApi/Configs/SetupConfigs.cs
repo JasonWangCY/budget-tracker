@@ -4,7 +4,7 @@ using Serilog;
 using BudgetTracker.Infrastructure.Identity;
 using Microsoft.AspNetCore.Identity;
 using BudgetTracker.Infrastructure.Data;
-using BudgetTracker.Domain.Services.Interfaces;
+using BudgetTracker.Infrastructure.Identity.Interfaces;
 
 namespace BudgetTracker.WebApi.Configs;
 

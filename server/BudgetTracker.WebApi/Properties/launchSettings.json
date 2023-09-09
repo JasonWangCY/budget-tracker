@@ -14,7 +14,7 @@
       "dotnetRunMessages": true,
       "launchBrowser": false,
       "launchUrl": "swagger",
-      "applicationUrl": "http://localhost:7073;",
+      "applicationUrl": "http://localhost:8073;",
       "environmentVariables": {
         "ASPNETCORE_ENVIRONMENT": "Development",
         "SEED_DB": "true",
@@ -27,7 +27,7 @@
       "dotnetRunMessages": true,
       "launchBrowser": false,
       "launchUrl": "swagger",
-      "applicationUrl": "http://localhost:7073;",
+      "applicationUrl": "http://localhost:8073;",
       "environmentVariables": {
         "ASPNETCORE_ENVIRONMENT": "Development",
         "SEED_DB": "false",

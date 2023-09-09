@@ -2,8 +2,9 @@
 
 namespace BudgetTracker.Domain.PersistenceInterfaces;
 
-public interface IUnitOfWork
+public interface IUnitOfWork : IDisposable
 {
+    IDatabaseTransaction BeginTransaction();
     Task<int> SaveChangesAsync();
     IUserRepository Users { get; }
     IBudgetRepository Budgets { get; }

@@ -1,6 +1,5 @@
-﻿using BudgetTracker.Application.Utils;
-using BudgetTracker.Domain.Services.Interfaces;
-using BudgetTracker.Infrastructure.Identity;
+﻿using BudgetTracker.Infrastructure.Identity;
+using BudgetTracker.Infrastructure.Identity.Interfaces;
 using BudgetTracker.WebApi.TransferModels;
 using BudgetTracker.WebApi.Utils;
 using Microsoft.AspNetCore.Authorization;
@@ -36,9 +35,9 @@ public class UserController : ControllerBase
     [HttpPost]
     [Route("register")]
     [AllowAnonymous]
-    [ProducesResponseType(StatusCodes.Status200OK)]
+    [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(RegisterResponse))]
+    [ProducesResponseType(StatusCodes.Status409Conflict, Type = typeof(RegisterResponse))]
     [ProducesResponseType(StatusCodes.Status500InternalServerError, Type = typeof(RegisterResponse))]
-    // TODO: Potential issue: what if system crashes between saving in Identity DB and saving in Domain DB?
     public async Task<ActionResult<RegisterResponse>> Register(RegisterRequest request)
     {
         var userExists = await _userManager.FindByNameAsync(request.UserName);
@@ -59,17 +58,17 @@ public class UserController : ControllerBase
             Email = request.Email,
             SecurityStamp = Guid.NewGuid().ToString(),
         };
-        var result = await _userManager.CreateAsync(user, request.Password);
-        if (!result.Succeeded)
+        var userRoles = new List<string> { UserRole.USER };
+        var saveUserSucceeded = await _userService.AddUser(user, request.Password, userRoles);
+        if (!saveUserSucceeded)
         {
             return StatusCode(StatusCodes.Status500InternalServerError, new RegisterResponse
             {
                 Status = RegisterStatus.ERROR,
-                Message = result.Errors.Select(x => x.Code).DumpJson()
+                Message = "User creation failed! Please check user details and try again."
             });
         }
 
-        await _userService.AddUser(user.Id, user.UserName, user.FirstName, user.LastName);
         return Ok(new RegisterResponse
         {
             Status = RegisterStatus.SUCCESS,
@@ -80,22 +79,22 @@ public class UserController : ControllerBase
     [HttpPost]
     [Route("registerAdmin")]
     [AuthorizeRoles(UserRole.ADMIN)]
-    [ProducesResponseType(StatusCodes.Status200OK)]
+    [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(RegisterResponse))]
+    [ProducesResponseType(StatusCodes.Status409Conflict, Type = typeof(RegisterResponse))]
     [ProducesResponseType(StatusCodes.Status500InternalServerError, Type = typeof(RegisterResponse))]
-    // TODO: Potential issue: what if system crashes between saving in Identity DB and saving in Domain DB?
     public async Task<IActionResult> RegisterAdmin(RegisterRequest request)
     {
         var userExists = await _userManager.FindByNameAsync(request.UserName);
         if (userExists != null)
         {
-            return StatusCode(StatusCodes.Status500InternalServerError, new RegisterResponse
+            return StatusCode(StatusCodes.Status409Conflict, new RegisterResponse
             {
                 Status = RegisterStatus.ERROR,
                 Message = "User already exists!"
             });
         }
 
-        var user = new ApplicationUser
+        var adminUser = new ApplicationUser
         {
             UserName = request.UserName,
             FirstName = request.FirstName,
@@ -103,8 +102,9 @@ public class UserController : ControllerBase
             Email = request.Email,
             SecurityStamp = Guid.NewGuid().ToString(),
         };
-        var result = await _userManager.CreateAsync(user, request.Password);
-        if (!result.Succeeded)
+        var adminUserRoles = new List<string> { UserRole.ADMIN, UserRole.USER };
+        var saveUserSucceeded = await _userService.AddUser(adminUser, request.Password, adminUserRoles);
+        if (!saveUserSucceeded)
         {
             return StatusCode(StatusCodes.Status500InternalServerError, new RegisterResponse
             {
@@ -113,7 +113,6 @@ public class UserController : ControllerBase
             });
         }
 
-        await _userService.AddUser(user.Id, user.UserName, user.FirstName, user.LastName);
         return Ok(new RegisterResponse
         {
             Status = RegisterStatus.SUCCESS,
