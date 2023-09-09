@@ -18,13 +18,13 @@ export const signIn = (formData: UserInfo, navigate: NavigateFunction) => {
   return async (dispatch: AuthDispatchType) => {
     try {
       console.log("trying to sign in...");
-      // TODO: Set up CORS request
-      const { data } = await api.signIn(formData);
+      const { data: authResponse } = await api.signIn(formData);
       const action: AuthAction = {
         type: actionType.AUTH,
         userInfo: formData,
       };
 
+      localStorage.setItem("profile", authResponse.token);
       dispatch(action);
 
       navigate("/home");

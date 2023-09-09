@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useAppDispatch } from "../../app/hooks";
 import { signIn, signUp } from "./actions";
 import {
@@ -10,7 +10,7 @@ import {
 } from "@mui/material";
 import { Visibility, VisibilityOff } from "@mui/icons-material";
 import { type Dispatch } from "redux";
-import { useNavigate } from "react-router-dom";
+import { Navigate, useNavigate } from "react-router-dom";
 
 export interface UserInfo {
   firstName: string;
@@ -20,7 +20,6 @@ export interface UserInfo {
   password: string;
 }
 
-// TODO: Can we initialise with last Name = null?
 const initialState: UserInfo = {
   firstName: "",
   lastName: "",
@@ -36,11 +35,20 @@ const Auth = () => {
   const navigate = useNavigate();
   // TODO: Need to move away from storing JWT in local storage.
   // https://dev.to/rdegges/please-stop-using-local-storage-1i04
-  const [isLoggedIn, setIsLoggedIn] = useState(
-    localStorage.getItem("profile") ?? false,
+  // Consider storing in HTTP only cookies,
+  // but the downside is that there is no easy way to add the authorization header in the HTTP request.
+  // https://www.learmoreseekmore.com/2022/10/reactjs-v18-jwtauthentication-using-httponly-cookie.html
+  const [isLoggedIn, setIsLoggedIn] = useState<boolean>(
+    localStorage.getItem("profile") != null,
   );
-
   const [showPassword, setShowPassword] = useState(false);
+
+  // TODO: Handle redirects in a more systematic way
+  // https://stackoverflow.com/questions/70341850/react-redirect-to-login-page-when-not-authenticated
+  if (isLoggedIn) {
+    return <Navigate to="/home" replace={true} />;
+  }
+
   const handleShowPassword = () => {
     setShowPassword(!showPassword);
   };
