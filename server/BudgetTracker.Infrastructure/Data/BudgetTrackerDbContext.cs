@@ -5,7 +5,6 @@ using Microsoft.EntityFrameworkCore;
 
 namespace BudgetTracker.Infrastructure.Data;
 
-// TODO: Combine this DbContext with ApplicationDbContext?
 public class BudgetTrackerDbContext : DbContext
 {
     public BudgetTrackerDbContext(DbContextOptions options) : base(options)

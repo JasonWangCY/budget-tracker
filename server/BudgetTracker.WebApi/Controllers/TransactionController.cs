@@ -15,7 +15,6 @@ using static BudgetTracker.Application.Constants.Constants;
 
 namespace BudgetTracker.WebApi.Controllers;
 
-// TODO: Follow REST API conventions (get rid of verbs and keep nouns)
 [Authorize]
 [ApiController]
 [Route("api/[controller]")]
@@ -39,7 +38,7 @@ public class TransactionController : ControllerBase
     }
 
     [HttpGet]
-    [Route("listTransactionTypes")]
+    [Route("transactionTypes")]
     [AuthorizeRoles(UserRole.ADMIN, UserRole.USER)]
     [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(List<TransactionTypeDto>))]
     public async Task<IActionResult> ListTransactionTypes()
@@ -52,7 +51,6 @@ public class TransactionController : ControllerBase
     }
 
     [HttpGet]
-    [Route("listTransactions")]
     [AuthorizeRoles(UserRole.ADMIN, UserRole.USER)]
     [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(IEnumerable<TransactionDto>))]
     public async Task<IActionResult> ListTransactions(string? startDate=null, string? endDate=null)
@@ -77,7 +75,6 @@ public class TransactionController : ControllerBase
     }
 
     [HttpPost]
-    [Route("addTransaction")]
     [AuthorizeRoles(UserRole.ADMIN, UserRole.USER)]
     [ProducesResponseType(StatusCodes.Status200OK)] 
     public async Task<IActionResult> AddTransactions(IEnumerable<AddTransactionRequest> requests)
@@ -115,8 +112,7 @@ public class TransactionController : ControllerBase
         return Ok(new GenericResponse { HasError = false });
     }
 
-    [HttpPost]
-    [Route("updateTransactions")]
+    [HttpPut]
     [AuthorizeRoles(UserRole.ADMIN, UserRole.USER)]
     [ProducesResponseType(StatusCodes.Status200OK)]
     public async Task<IActionResult> UpdateTransactions(List<UpdateTransactionRequest> requests)
@@ -130,8 +126,7 @@ public class TransactionController : ControllerBase
         return Ok();
     }
 
-    [HttpPost]
-    [Route("deleteTransaction")]
+    [HttpDelete]
     [AuthorizeRoles(UserRole.ADMIN, UserRole.USER)]
     [ProducesResponseType(StatusCodes.Status200OK)]
     public async Task<IActionResult> DeleteTransactions(IEnumerable<DeleteTransactionRequest> requests)
@@ -143,7 +138,7 @@ public class TransactionController : ControllerBase
     }
 
     [HttpPost]
-    [Route("addTransactionTypes")]
+    [Route("transactionTypes")]
     [AuthorizeRoles(UserRole.ADMIN, UserRole.USER)]
     [ProducesResponseType(StatusCodes.Status200OK)]
     public async Task<IActionResult> AddTransactionTypes(IEnumerable<AddTransactionTypeRequest> requests)
@@ -157,8 +152,8 @@ public class TransactionController : ControllerBase
         return Ok();
     }
 
-    [HttpPost]
-    [Route("updateTransactionTypes")]
+    [HttpPut]
+    [Route("transactionTypes")]
     [AuthorizeRoles(UserRole.ADMIN, UserRole.USER)]
     [ProducesResponseType(StatusCodes.Status200OK)]
     public async Task<IActionResult> UpdateTransactionTypes(List<UpdateTransactionTypeRequest> requests)
@@ -172,8 +167,8 @@ public class TransactionController : ControllerBase
         return Ok();
     }
 
-    [HttpPost]
-    [Route("deleteTransactionTypes")]
+    [HttpDelete]
+    [Route("transactionTypes")]
     [AuthorizeRoles(UserRole.ADMIN, UserRole.USER)]
     [ProducesResponseType(StatusCodes.Status200OK)]
     public async Task<IActionResult> DeleteTransactionTypes(IEnumerable<DeleteTransactionTypeRequest> requests)
@@ -185,7 +180,7 @@ public class TransactionController : ControllerBase
     }
 
     [HttpPost]
-    [Route("addDefaultTransactionTypes")]
+    [Route("defaultTransactionTypes")]
     [AuthorizeRoles(UserRole.ADMIN)]
     [ProducesResponseType(StatusCodes.Status200OK)]
     public async Task<IActionResult> AddDefaultTransactionTypes(List<AddTransactionTypeRequest> requests)
@@ -198,8 +193,8 @@ public class TransactionController : ControllerBase
         return Ok();
     }
 
-    [HttpPost]
-    [Route("deleteDefaultTransactionTypes")]
+    [HttpDelete]
+    [Route("defaultTransactionTypes")]
     [AuthorizeRoles(UserRole.ADMIN)]
     [ProducesResponseType(StatusCodes.Status200OK)]
     public async Task<IActionResult> DeleteDefaultTransactionTypes(List<DeleteTransactionTypeRequest> requests)

@@ -11,7 +11,6 @@ using static BudgetTracker.Application.Constants.Constants;
 
 namespace BudgetTracker.WebApi.Controllers;
 
-// TODO: Follow REST API conventions (get rid of verbs and keep nouns)
 [Authorize]
 [ApiController]
 [Route("api/[controller]")]
@@ -35,7 +34,6 @@ public class CategoryController : ControllerBase
     }
 
     [HttpGet]
-    [Route("listCategories")]
     [AuthorizeRoles(UserRole.ADMIN, UserRole.USER)]
     [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(List<CategoryDto>))]
     public async Task<IActionResult> ListCategories()
@@ -54,7 +52,6 @@ public class CategoryController : ControllerBase
     }
 
     [HttpPost]
-    [Route("addCategories")]
     [AuthorizeRoles(UserRole.ADMIN, UserRole.USER)]
     [ProducesResponseType(StatusCodes.Status200OK)]
     public async Task<IActionResult> AddCategories(List<AddCategoryRequest> requests)
@@ -70,8 +67,7 @@ public class CategoryController : ControllerBase
 
     // TODO: We need concurrency control to prevent race condition here.
     // Let's use optimistic concurrency with versioning in Postgres
-    [HttpPost]
-    [Route("updateCategories")]
+    [HttpPut]
     [AuthorizeRoles(UserRole.ADMIN, UserRole.USER)]
     [ProducesResponseType(StatusCodes.Status200OK)]
     public async Task<IActionResult> UpdateCategories(List<UpdateCategoryRequest> requests)
@@ -85,8 +81,7 @@ public class CategoryController : ControllerBase
         return Ok();
     }
 
-    [HttpPost]
-    [Route("deleteCategories")]
+    [HttpDelete]
     [AuthorizeRoles(UserRole.ADMIN, UserRole.USER)]
     [ProducesResponseType(StatusCodes.Status200OK)]
     public async Task<IActionResult> DeleteCategories(List<DeleteCategoryRequest> requests)
@@ -98,7 +93,7 @@ public class CategoryController : ControllerBase
     }
 
     [HttpPost]
-    [Route("addDefaultCategories")]
+    [Route("default")]
     [AuthorizeRoles(UserRole.ADMIN)]
     [ProducesResponseType(StatusCodes.Status200OK)]
     public async Task<IActionResult> AddDefaultCategories(List<AddCategoryRequest> requests)
@@ -111,8 +106,8 @@ public class CategoryController : ControllerBase
         return Ok();
     }
 
-    [HttpPost]
-    [Route("deleteDefaultCategories")]
+    [HttpDelete]
+    [Route("default")]
     [AuthorizeRoles(UserRole.ADMIN)]
     [ProducesResponseType(StatusCodes.Status200OK)]
     public async Task<IActionResult> DeleteDefaultCategories(List<DeleteCategoryRequest> requests)
