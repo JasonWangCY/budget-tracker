@@ -65,8 +65,6 @@ public class CategoryController : ControllerBase
         return Ok();
     }
 
-    // TODO: We need concurrency control to prevent race condition here.
-    // Let's use optimistic concurrency with versioning in Postgres
     [HttpPut]
     [AuthorizeRoles(UserRole.ADMIN, UserRole.USER)]
     [ProducesResponseType(StatusCodes.Status200OK)]

@@ -34,7 +34,7 @@ public static class SetupConfigs
             var identityContext = scopedProvider.GetRequiredService<ApplicationDbContext>();
             var budgetTrackerContext = scopedProvider.GetRequiredService<BudgetTrackerDbContext>();
             var userService = scopedProvider.GetRequiredService<IUserService>();
-            await ApplicationDbContextSeed.SeedAsync(identityContext, budgetTrackerContext, userManager, roleManager, userService);
+            await ApplicationDbContextSeed.SeedAsync(identityContext, budgetTrackerContext, roleManager, userService);
         }
         catch (Exception ex)
         {
